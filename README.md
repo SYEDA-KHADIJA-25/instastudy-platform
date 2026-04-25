@@ -44,5 +44,5 @@ This project demonstrates the design and development of a structured tutoring pl
 - Syeda Khadija Naqvi
 - Minahil Faiz  
 
-📄 Note
+📄 Note:
 This project is developed for academic purposes.
