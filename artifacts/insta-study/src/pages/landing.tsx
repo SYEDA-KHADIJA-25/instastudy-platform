@@ -278,7 +278,7 @@ export default function LandingPage() {
             {/* Eyebrow badge */}
             <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
               <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-[11px] font-bold tracking-widest uppercase mb-8"
-                style={{ background: "rgba(91,111,212,0.08)", border: "1px solid rgba(91,111,212,0.22)", color: BRAND.deep }}>
+                style={{ background: "white", border: "1.5px solid rgba(91,111,212,0.4)", color: BRAND.deep, boxShadow: "0 2px 10px rgba(91,111,212,0.12)" }}>
                 <span className="h-1.5 w-1.5 rounded-full animate-pulse-glow" style={{ background: BRAND.deep }} />
                 Verified peer tutors
               </span>
