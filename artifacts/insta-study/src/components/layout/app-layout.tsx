@@ -1,0 +1,149 @@
+import { Link, useLocation } from "wouter";
+import { useAuth } from "@/components/auth-provider";
+import { useLogout } from "@workspace/api-client-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import {
+  LayoutDashboard,
+  Search,
+  BookOpen,
+  Calendar,
+  User,
+  GraduationCap,
+  LogOut,
+  Menu,
+  X,
+} from "lucide-react";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+
+const navItems = [
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/tutors", label: "Find Tutors", icon: Search },
+  { href: "/bookings", label: "My Bookings", icon: BookOpen },
+  { href: "/become-tutor", label: "Become a Tutor", icon: GraduationCap },
+  { href: "/availability", label: "Availability", icon: Calendar, tutorOnly: true },
+  { href: "/profile", label: "Profile", icon: User },
+];
+
+export function AppLayout({ children }: { children: React.ReactNode }) {
+  const { user, refreshUser } = useAuth();
+  const [location] = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const queryClient = useQueryClient();
+  const logoutMutation = useLogout({
+    mutation: {
+      onSuccess: () => {
+        queryClient.clear();
+        refreshUser();
+        window.location.href = "/";
+      },
+    },
+  });
+
+  const visibleNav = navItems.filter(
+    (item) => !item.tutorOnly || (user?.isTutor && user?.tutorStatus === "approved")
+  );
+
+  return (
+    <div className="flex min-h-screen bg-background">
+      {/* Sidebar */}
+      <aside
+        className={cn(
+          "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-sidebar-border bg-sidebar transition-transform duration-300 lg:translate-x-0",
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        <div className="flex h-16 items-center gap-2 border-b border-sidebar-border px-6">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+            <GraduationCap className="h-5 w-5 text-primary-foreground" />
+          </div>
+          <span className="text-lg font-semibold text-sidebar-foreground">Insta-Study</span>
+        </div>
+
+        <nav className="flex-1 overflow-y-auto px-3 py-4">
+          <ul className="space-y-1">
+            {visibleNav.map((item) => {
+              const Icon = item.icon;
+              const isActive = location === item.href;
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    className={cn(
+                      "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                      isActive
+                        ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                        : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                    )}
+                    data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
+                  >
+                    <Icon className="h-4 w-4 shrink-0" />
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        <div className="border-t border-sidebar-border p-3">
+          {user && (
+            <div className="mb-2 flex items-center gap-3 rounded-lg px-3 py-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold">
+                {user.name.charAt(0).toUpperCase()}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium text-sidebar-foreground">{user.name}</p>
+                <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+              </div>
+            </div>
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start gap-2 text-muted-foreground hover:text-foreground"
+            onClick={() => logoutMutation.mutate({})}
+            data-testid="button-logout"
+          >
+            <LogOut className="h-4 w-4" />
+            Sign out
+          </Button>
+        </div>
+      </aside>
+
+      {/* Mobile overlay */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      {/* Main content */}
+      <div className="flex flex-1 flex-col lg:ml-64">
+        <header className="flex h-16 items-center border-b border-border bg-background px-6 lg:hidden">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            data-testid="button-menu-toggle"
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
+          <div className="ml-3 flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
+              <GraduationCap className="h-4 w-4 text-primary-foreground" />
+            </div>
+            <span className="font-semibold text-foreground">Insta-Study</span>
+          </div>
+        </header>
+
+        <main className="flex-1 overflow-y-auto p-6">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}
