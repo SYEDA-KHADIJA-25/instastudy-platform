@@ -35,13 +35,16 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 
 /* ─── Brand tokens ───────────────────────────────────────────────────────── */
 const BRAND = {
-  deep:       "#33006F",                                                    // primary dark purple
-  lavender:   "#CDACDB",                                                    // soft lavender accent
-  pink:       "#FF7EB3",                                                    // button pink end
-  purple:     "#8B7BFF",                                                    // button purple end
-  btnGrad:    "linear-gradient(135deg, #FF7EB3 0%, #8B7BFF 100%)",          // primary button fill
-  darkBg:     "#0a0118",                                                    // hero / footer bg
-  lightBg:    "#F7F0FB",                                                    // tinted section bg
+  deep:       "#5B6FD4",   // cornflower blue — primary
+  peach:      "#EDBA96",   // warm peach — accent
+  navy:       "#0f1240",   // deep navy — dark text
+  lightBg:    "#EEF2FF",   // very light blue-white — tinted sections
+  darkBg:     "#1a1f4e",   // deep navy — dark sections / footer
+  // legacy aliases kept for references below
+  lavender:   "#EDBA96",
+  pink:       "#EDBA96",
+  purple:     "#7B8FE8",
+  btnGrad:    "linear-gradient(135deg, #5B6FD4 0%, #7B8FE8 100%)",
 };
 
 function scrollToSection(id: string) {
@@ -214,12 +217,12 @@ export default function LandingPage() {
       {/* ── Navbar ── */}
       <nav
         className="fixed top-0 left-0 right-0 z-50 flex h-16 items-center justify-between px-6 md:px-10 backdrop-blur-md"
-        style={{ background: "rgba(255,255,255,0.85)", borderBottom: "1px solid rgba(51,0,111,0.08)" }}
+        style={{ background: "rgba(255,255,255,0.88)", borderBottom: "1px solid rgba(91,111,212,0.1)" }}
       >
         <Link href="/" className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg"
             style={{ background: BRAND.deep }}>
-            <BookOpen className="h-4 w-4" style={{ color: BRAND.lavender }} />
+            <BookOpen className="h-4 w-4" style={{ color: "white" }} />
           </div>
           <span className="text-lg font-bold" style={{ color: BRAND.deep }}>Insta-Study</span>
         </Link>
@@ -228,21 +231,21 @@ export default function LandingPage() {
           {[{ label: "Features", id: "features" }, { label: "How it Works", id: "how-it-works" }].map((item) => (
             <button key={item.id} onClick={() => scrollToSection(item.id)}
               className="text-sm font-medium transition-colors"
-              style={{ color: "rgba(51,0,111,0.5)" }}
+              style={{ color: "rgba(91,111,212,0.6)" }}
               onMouseEnter={e => (e.currentTarget.style.color = BRAND.deep)}
-              onMouseLeave={e => (e.currentTarget.style.color = "rgba(51,0,111,0.5)")}>
+              onMouseLeave={e => (e.currentTarget.style.color = "rgba(91,111,212,0.6)")}>
               {item.label}
             </button>
           ))}
           <Link href="/tutors" className="text-sm font-medium transition-colors"
-            style={{ color: "rgba(51,0,111,0.5)" }}>
+            style={{ color: "rgba(91,111,212,0.6)" }}>
             Browse Tutors
           </Link>
         </div>
 
         <div className="flex items-center gap-3">
           <Link href="/login">
-            <Button variant="ghost" size="sm" className="font-medium" style={{ color: "rgba(51,0,111,0.6)" }}>
+            <Button variant="ghost" size="sm" className="font-medium" style={{ color: "rgba(91,111,212,0.7)" }}>
               Sign in
             </Button>
           </Link>
@@ -275,7 +278,7 @@ export default function LandingPage() {
             {/* Eyebrow badge */}
             <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
               <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-[11px] font-bold tracking-widest uppercase mb-8"
-                style={{ background: "rgba(51,0,111,0.07)", border: "1px solid rgba(51,0,111,0.18)", color: BRAND.deep }}>
+                style={{ background: "rgba(91,111,212,0.08)", border: "1px solid rgba(91,111,212,0.22)", color: BRAND.deep }}>
                 <span className="h-1.5 w-1.5 rounded-full animate-pulse-glow" style={{ background: BRAND.deep }} />
                 Verified peer tutors
               </span>
@@ -290,7 +293,7 @@ export default function LandingPage() {
             >
               The smarter way<br />to master{" "}
               <span style={{
-                background: `linear-gradient(120deg, ${BRAND.deep} 0%, #7c3aed 100%)`,
+                background: "linear-gradient(120deg, #EDBA96 0%, #E0935A 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -322,7 +325,7 @@ export default function LandingPage() {
               </Link>
               <Link href="/register">
                 <Button size="lg" variant="outline" className="gap-2 px-7 h-12 text-[15px]"
-                  style={{ borderColor: "rgba(51,0,111,0.2)", color: BRAND.deep }}
+                  style={{ borderColor: "rgba(91,111,212,0.35)", color: BRAND.deep }}
                   data-testid="button-cta-become-tutor">
                   Become a tutor <ChevronRight className="h-4 w-4" />
                 </Button>
@@ -334,7 +337,7 @@ export default function LandingPage() {
         {/* Scroll indicator */}
         <motion.div
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5"
-          style={{ color: "rgba(255,255,255,0.4)" }}
+          style={{ color: "rgba(91,111,212,0.5)" }}
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.3 }}
         >
           <span className="text-[9px] tracking-widest uppercase font-semibold">Scroll</span>
