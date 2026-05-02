@@ -265,21 +265,16 @@ export default function LandingPage() {
           backgroundPosition: "center top",
         }}
       >
-        {/* Left-to-right gradient overlay — keeps text readable on the left */}
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: "linear-gradient(100deg, rgba(10,1,24,0.78) 0%, rgba(10,1,24,0.55) 42%, rgba(10,1,24,0.08) 75%, transparent 100%)" }} />
-
-        {/* Subtle bottom fade into the page */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
-          style={{ background: "linear-gradient(to bottom, transparent, rgba(10,1,24,0.25))" }} />
+        {/* No full overlay — background image shows through fully */}
 
         {/* ── Content ── */}
         <motion.div
           className="relative z-10 mx-auto w-full max-w-6xl px-8 md:px-12 pt-32 pb-24"
           style={{ y: heroY, opacity: heroOpacity }}
         >
-          {/* LEFT: Copy — max-width so it doesn't crowd the illustration showing through */}
-          <div className="flex flex-col items-start text-left max-w-xl">
+          {/* LEFT: Copy — localized frosted backdrop only behind text */}
+          <div className="flex flex-col items-start text-left max-w-xl rounded-2xl px-8 py-8"
+            style={{ background: "rgba(10,1,24,0.52)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
             {/* Eyebrow badge */}
             <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
               <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-[11px] font-bold tracking-widest uppercase mb-9"
