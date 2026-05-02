@@ -184,35 +184,35 @@ export default function LandingPage() {
       {/* ── Navbar ── */}
       <nav
         className="fixed top-0 left-0 right-0 z-50 flex h-16 items-center justify-between px-6 md:px-10 backdrop-blur-md"
-        style={{ background: "rgba(10,1,24,0.75)", borderBottom: `1px solid rgba(205,172,219,0.15)` }}
+        style={{ background: "rgba(255,255,255,0.85)", borderBottom: "1px solid rgba(51,0,111,0.08)" }}
       >
         <Link href="/" className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg"
             style={{ background: BRAND.deep }}>
             <BookOpen className="h-4 w-4" style={{ color: BRAND.lavender }} />
           </div>
-          <span className="text-lg font-bold text-white">Insta-Study</span>
+          <span className="text-lg font-bold" style={{ color: BRAND.deep }}>Insta-Study</span>
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">
           {[{ label: "Features", id: "features" }, { label: "How it Works", id: "how-it-works" }].map((item) => (
             <button key={item.id} onClick={() => scrollToSection(item.id)}
               className="text-sm font-medium transition-colors"
-              style={{ color: "rgba(255,255,255,0.55)" }}
-              onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
-              onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.55)")}>
+              style={{ color: "rgba(51,0,111,0.5)" }}
+              onMouseEnter={e => (e.currentTarget.style.color = BRAND.deep)}
+              onMouseLeave={e => (e.currentTarget.style.color = "rgba(51,0,111,0.5)")}>
               {item.label}
             </button>
           ))}
           <Link href="/tutors" className="text-sm font-medium transition-colors"
-            style={{ color: "rgba(255,255,255,0.55)" }}>
+            style={{ color: "rgba(51,0,111,0.5)" }}>
             Browse Tutors
           </Link>
         </div>
 
         <div className="flex items-center gap-3">
           <Link href="/login">
-            <Button variant="ghost" size="sm" className="text-white/60 hover:text-white hover:bg-white/10">
+            <Button variant="ghost" size="sm" className="font-medium" style={{ color: "rgba(51,0,111,0.6)" }}>
               Sign in
             </Button>
           </Link>
@@ -228,22 +228,16 @@ export default function LandingPage() {
           HERO
       ══════════════════════════════════════════ */}
       <section
-        className="relative min-h-screen flex items-center overflow-hidden"
-        style={{ background: BRAND.darkBg }}
+        className="relative min-h-screen flex items-center overflow-hidden bg-white"
       >
         {/* Dot grid */}
-        <div className="absolute inset-0 hero-grid-bg opacity-70" />
-        <div className="absolute inset-0 noise-overlay" />
+        <div className="absolute inset-0 hero-grid-bg-light opacity-60" />
 
-        {/* Two intentional glows — anchored, not scattered */}
+        {/* Soft purple glow orbs for white bg */}
         <div className="absolute -top-32 -left-32 w-[700px] h-[700px] rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(51,0,111,0.55) 0%, transparent 65%)", filter: "blur(72px)" }} />
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(139,123,255,0.14) 0%, transparent 70%)", filter: "blur(60px)" }} />
-
-        {/* Fine horizontal rule — top edge texture */}
-        <div className="absolute top-0 left-0 right-0 h-px"
-          style={{ background: `linear-gradient(to right, transparent 0%, rgba(205,172,219,0.2) 40%, rgba(205,172,219,0.2) 60%, transparent 100%)` }} />
+          style={{ background: "radial-gradient(circle, rgba(205,172,219,0.35) 0%, transparent 65%)", filter: "blur(80px)" }} />
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(51,0,111,0.07) 0%, transparent 70%)", filter: "blur(70px)" }} />
 
         {/* ── Split layout ── */}
         <motion.div
@@ -255,16 +249,16 @@ export default function LandingPage() {
             {/* Eyebrow badge */}
             <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
               <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-[11px] font-bold tracking-widest uppercase mb-9"
-                style={{ background: "rgba(205,172,219,0.09)", border: "1px solid rgba(205,172,219,0.22)", color: BRAND.lavender }}>
-                <span className="h-1.5 w-1.5 rounded-full animate-pulse-glow" style={{ background: BRAND.lavender }} />
+                style={{ background: "rgba(51,0,111,0.06)", border: "1px solid rgba(51,0,111,0.15)", color: BRAND.deep }}>
+                <span className="h-1.5 w-1.5 rounded-full animate-pulse-glow" style={{ background: BRAND.deep }} />
                 Verified peer tutors
               </span>
             </motion.div>
 
             {/* Headline */}
             <motion.h1
-              className="font-black text-white leading-[1.0] tracking-[-0.03em]"
-              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "clamp(42px, 5.5vw, 76px)" }}
+              className="font-black leading-[1.0] tracking-[-0.03em]"
+              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "clamp(42px, 5.5vw, 76px)", color: BRAND.deep }}
               initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.1 }}
             >
@@ -272,7 +266,7 @@ export default function LandingPage() {
               <span className="relative">
                 to master{" "}
                 <span style={{
-                  background: `linear-gradient(120deg, #CDACDB 0%, #e8d5f0 50%, #CDACDB 100%)`,
+                  background: `linear-gradient(120deg, ${BRAND.deep} 0%, #6600cc 50%, ${BRAND.deep} 100%)`,
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
@@ -285,7 +279,7 @@ export default function LandingPage() {
             {/* Sub-headline */}
             <motion.p
               className="mt-7 text-[17px] leading-[1.75] max-w-[440px] font-normal"
-              style={{ color: "rgba(255,255,255,0.48)", letterSpacing: "0.01em" }}
+              style={{ color: "rgba(51,0,111,0.5)", letterSpacing: "0.01em" }}
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.25 }}
             >
@@ -312,7 +306,8 @@ export default function LandingPage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="gap-2 px-7 h-12 text-[15px] border-white/20 text-white bg-white/5 hover:bg-white/10 hover:text-white"
+                  className="gap-2 px-7 h-12 text-[15px]"
+                  style={{ borderColor: "rgba(51,0,111,0.2)", color: BRAND.deep }}
                   data-testid="button-cta-become-tutor"
                 >
                   Become a tutor <ChevronRight className="h-4 w-4" />
@@ -340,15 +335,12 @@ export default function LandingPage() {
         {/* Scroll indicator */}
         <motion.div
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5"
-          style={{ color: "rgba(205,172,219,0.3)" }}
+          style={{ color: "rgba(51,0,111,0.3)" }}
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.3 }}
         >
           <span className="text-[9px] tracking-widest uppercase font-semibold">Scroll</span>
           <ArrowDown className="h-3.5 w-3.5 animate-bounce-gentle" />
         </motion.div>
-
-        <div className="absolute bottom-0 left-0 right-0 h-28 pointer-events-none"
-          style={{ background: `linear-gradient(to bottom, transparent, ${BRAND.darkBg})` }} />
       </section>
 
       {/* Marquee */}
