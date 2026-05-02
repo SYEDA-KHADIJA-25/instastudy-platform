@@ -258,43 +258,47 @@ export default function LandingPage() {
           HERO
       ══════════════════════════════════════════ */}
       <section
-        className="relative min-h-screen flex items-center overflow-hidden bg-white"
+        className="relative min-h-screen flex items-center overflow-hidden"
+        style={{
+          backgroundImage: "url('/hero-bg.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center top",
+        }}
       >
-        {/* Dot grid */}
-        <div className="absolute inset-0 hero-grid-bg-light opacity-60" />
+        {/* Left-to-right gradient overlay — keeps text readable on the left */}
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: "linear-gradient(100deg, rgba(10,1,24,0.78) 0%, rgba(10,1,24,0.55) 42%, rgba(10,1,24,0.08) 75%, transparent 100%)" }} />
 
-        {/* Soft purple glow orbs for white bg */}
-        <div className="absolute -top-32 -left-32 w-[700px] h-[700px] rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(205,172,219,0.35) 0%, transparent 65%)", filter: "blur(80px)" }} />
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(51,0,111,0.07) 0%, transparent 70%)", filter: "blur(70px)" }} />
+        {/* Subtle bottom fade into the page */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+          style={{ background: "linear-gradient(to bottom, transparent, rgba(10,1,24,0.25))" }} />
 
-        {/* ── Split layout ── */}
+        {/* ── Content ── */}
         <motion.div
-          className="relative z-10 mx-auto w-full max-w-6xl px-8 md:px-12 pt-32 pb-20 flex flex-col md:flex-row items-center gap-12"
+          className="relative z-10 mx-auto w-full max-w-6xl px-8 md:px-12 pt-32 pb-24"
           style={{ y: heroY, opacity: heroOpacity }}
         >
-          {/* LEFT: Copy */}
-          <div className="flex-1 flex flex-col items-start text-left">
+          {/* LEFT: Copy — max-width so it doesn't crowd the illustration showing through */}
+          <div className="flex flex-col items-start text-left max-w-xl">
             {/* Eyebrow badge */}
             <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
               <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-[11px] font-bold tracking-widest uppercase mb-9"
-                style={{ background: "rgba(51,0,111,0.06)", border: "1px solid rgba(51,0,111,0.15)", color: BRAND.deep }}>
-                <span className="h-1.5 w-1.5 rounded-full animate-pulse-glow" style={{ background: BRAND.deep }} />
+                style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.25)", color: "rgba(255,255,255,0.9)" }}>
+                <span className="h-1.5 w-1.5 rounded-full animate-pulse-glow" style={{ background: BRAND.lavender }} />
                 Verified peer tutors
               </span>
             </motion.div>
 
             {/* Headline */}
             <motion.h1
-              className="font-black leading-[1.08] tracking-[-0.03em]"
-              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "clamp(38px, 4.5vw, 64px)", color: "#0f0520" }}
+              className="font-black leading-[1.08] tracking-[-0.03em] text-white"
+              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "clamp(38px, 4.5vw, 66px)" }}
               initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.1 }}
             >
               The smarter way<br />to master{" "}
               <span style={{
-                background: `linear-gradient(120deg, ${BRAND.deep} 0%, #7c3aed 100%)`,
+                background: `linear-gradient(120deg, ${BRAND.lavender} 0%, #e8d5f0 100%)`,
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -305,7 +309,8 @@ export default function LandingPage() {
 
             {/* Sub-headline */}
             <motion.p
-              className="mt-6 text-[17px] leading-[1.7] max-w-[420px] font-normal text-gray-500"
+              className="mt-6 text-[17px] leading-[1.7] max-w-[440px] font-normal"
+              style={{ color: "rgba(255,255,255,0.7)" }}
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.25 }}
             >
@@ -333,7 +338,7 @@ export default function LandingPage() {
                   size="lg"
                   variant="outline"
                   className="gap-2 px-7 h-12 text-[15px]"
-                  style={{ borderColor: "rgba(51,0,111,0.2)", color: BRAND.deep }}
+                  style={{ borderColor: "rgba(255,255,255,0.35)", color: "white", background: "rgba(255,255,255,0.08)" }}
                   data-testid="button-cta-become-tutor"
                 >
                   Become a tutor <ChevronRight className="h-4 w-4" />
@@ -341,27 +346,12 @@ export default function LandingPage() {
               </Link>
             </motion.div>
           </div>
-
-          {/* RIGHT: Illustration */}
-          <motion.div
-            className="flex-1 flex items-center justify-center"
-            initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-          >
-            <img
-              src="/hero-doodle.png"
-              alt="Peer tutoring illustration"
-              className="w-full max-w-md drop-shadow-2xl animate-float-y"
-              style={{ filter: "drop-shadow(0 0 40px rgba(205,172,219,0.18))" }}
-            />
-          </motion.div>
-
         </motion.div>
 
         {/* Scroll indicator */}
         <motion.div
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5"
-          style={{ color: "rgba(51,0,111,0.3)" }}
+          style={{ color: "rgba(255,255,255,0.4)" }}
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.3 }}
         >
           <span className="text-[9px] tracking-widest uppercase font-semibold">Scroll</span>
