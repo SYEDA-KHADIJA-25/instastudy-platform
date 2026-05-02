@@ -653,19 +653,19 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════════
           FOOTER
       ══════════════════════════════════════════ */}
-      <footer style={{ background: BRAND.darkBg, borderTop: `1px solid rgba(205,172,219,0.12)` }}>
+      <footer style={{ background: BRAND.darkBg, borderTop: "1px solid rgba(91,111,212,0.2)" }}>
         <div className="mx-auto max-w-6xl px-6 py-10">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
             <div className="flex items-center gap-2.5">
               <div className="flex h-7 w-7 items-center justify-center rounded-lg" style={{ background: BRAND.deep }}>
-                <BookOpen className="h-3.5 w-3.5" style={{ color: BRAND.lavender }} />
+                <BookOpen className="h-3.5 w-3.5 text-white" />
               </div>
               <span className="font-bold text-white">Insta-Study</span>
             </div>
-            <p className="text-xs tracking-wide" style={{ color: "rgba(205,172,219,0.4)" }}>
+            <p className="text-xs tracking-wide" style={{ color: "rgba(237,186,150,0.55)" }}>
               Peer-to-peer tutoring, reimagined.
             </p>
-            <div className="flex gap-6 text-xs" style={{ color: "rgba(205,172,219,0.4)" }}>
+            <div className="flex gap-6 text-xs" style={{ color: "rgba(237,186,150,0.55)" }}>
               {[{ href: "/", label: "Home" }, { href: "/tutors", label: "Tutors" }, { href: "/login", label: "Sign in" }, { href: "/register", label: "Register" }].map((link) => (
                 <Link key={link.href} href={link.href}
                   className="transition-colors hover:text-white">
