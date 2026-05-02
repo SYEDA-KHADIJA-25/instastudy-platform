@@ -263,7 +263,7 @@ export default function LandingPage() {
           src="/hero-bg.png"
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none select-none"
+          className="absolute inset-0 w-full h-full object-cover object-top pointer-events-none select-none"
         />
 
         {/* ── Content — centered in the open white middle area ── */}
