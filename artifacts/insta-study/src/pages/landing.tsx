@@ -352,26 +352,41 @@ export default function LandingPage() {
           FEATURES
       ══════════════════════════════════════════ */}
       <section id="features" className="relative bg-white py-24 overflow-hidden">
-        <div className="absolute top-6 right-6 pointer-events-none" style={{ color: BRAND.lavender, opacity: 0.3 }}>
-          <AtomDoodle className="w-36 h-36" />
-        </div>
-        <div className="absolute bottom-6 left-6 pointer-events-none" style={{ color: BRAND.lavender, opacity: 0.25 }}>
-          <BookDoodle className="w-40 h-28" />
-        </div>
-
         <div className="mx-auto max-w-6xl px-6">
-          <motion.div className="text-center mb-14"
-            initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <span className="inline-block rounded-full px-4 py-1.5 text-xs font-bold tracking-widest uppercase mb-4"
-              style={{ background: BRAND.lightBg, color: BRAND.deep }}>
-              Why Insta-Study
-            </span>
-            <h2 className="text-4xl font-extrabold md:text-5xl" style={{ color: BRAND.deep }}>
-              Built for curious minds
-            </h2>
-            <p className="mt-4 max-w-lg mx-auto text-sm leading-relaxed" style={{ color: "#666" }}>
-              Everything you need to learn faster, deeper, and on your own terms.
-            </p>
+
+          {/* Session showcase — two-column */}
+          <motion.div className="mb-20 grid gap-10 md:grid-cols-2 items-center"
+            initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <div>
+              <span className="inline-block rounded-full px-4 py-1.5 text-xs font-bold tracking-widest uppercase mb-4"
+                style={{ background: BRAND.lightBg, color: BRAND.deep }}>
+                Why Insta-Study
+              </span>
+              <h2 className="text-4xl font-extrabold md:text-5xl leading-tight mb-5" style={{ color: BRAND.deep }}>
+                Built for<br />curious minds
+              </h2>
+              <p className="text-sm leading-relaxed mb-8" style={{ color: "#666" }}>
+                Everything you need to learn faster, deeper, and on your own terms — from a tutor who's been exactly where you are.
+              </p>
+              <Link href="/tutors">
+                <Button size="lg" className="gap-2 px-8 py-5 font-bold border-0 bg-primary text-primary-foreground">
+                  Browse tutors <ChevronRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl"
+              style={{ boxShadow: "0 32px 80px rgba(91,111,212,0.2)" }}>
+              <img
+                src="/illus-session.png"
+                alt="Live tutoring session"
+                className="w-full h-72 md:h-80 object-cover object-left-top"
+              />
+              <div className="absolute bottom-0 left-0 right-0 p-5"
+                style={{ background: "linear-gradient(to top, rgba(30,45,135,0.75) 0%, transparent 100%)" }}>
+                <p className="text-white font-bold text-sm">Live 1-on-1 sessions</p>
+                <p className="text-white/65 text-xs mt-0.5">Real-time tutoring from verified peers</p>
+              </div>
+            </div>
           </motion.div>
 
           <div className="grid gap-5 md:grid-cols-3">
@@ -413,12 +428,23 @@ export default function LandingPage() {
           style={{ background: `linear-gradient(to right, transparent, ${BRAND.lavender}, transparent)` }} />
 
         <div className="mx-auto max-w-5xl px-6">
-          <motion.div className="text-center mb-20"
+          <motion.div className="mb-20 grid gap-10 md:grid-cols-2 items-center"
             initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <h2 className="text-4xl font-extrabold md:text-5xl" style={{ color: BRAND.deep }}>
-              From zero to learning <span style={{ color: BRAND.lavender }}>in minutes</span>
-            </h2>
-            <p className="mt-4 text-sm" style={{ color: "#666" }}>No friction. No wait. Just knowledge.</p>
+            <div>
+              <h2 className="text-4xl font-extrabold md:text-5xl leading-tight" style={{ color: BRAND.deep }}>
+                From zero to learning{" "}
+                <span style={{ color: BRAND.lavender }}>in minutes</span>
+              </h2>
+              <p className="mt-4 text-sm leading-relaxed" style={{ color: "#666" }}>No friction. No wait. Just knowledge — in three simple steps.</p>
+            </div>
+            <div className="relative rounded-3xl overflow-hidden"
+              style={{ boxShadow: "0 24px 60px rgba(91,111,212,0.15)" }}>
+              <img
+                src="/illus-connect.png"
+                alt="Students connecting with tutors"
+                className="w-full h-56 md:h-64 object-cover object-center"
+              />
+            </div>
           </motion.div>
 
           <div className="relative">
@@ -606,45 +632,47 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════════
           CTA
       ══════════════════════════════════════════ */}
-      <section className="relative py-32 overflow-hidden bg-white">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none"
-          style={{ background: `radial-gradient(circle, ${BRAND.lightBg} 0%, transparent 70%)` }} />
+      <section className="relative overflow-hidden" style={{ background: BRAND.lightBg }}>
+        <div className="mx-auto max-w-6xl px-6">
+          <motion.div className="grid gap-0 md:grid-cols-2 items-stretch"
+            initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
 
-        <div className="absolute top-10 left-8 pointer-events-none animate-float"
-          style={{ color: BRAND.lavender, opacity: 0.5 }}>
-          <AtomDoodle className="w-28 h-28" />
-        </div>
-        <div className="absolute bottom-10 right-10 pointer-events-none animate-float-slow"
-          style={{ color: BRAND.lavender, opacity: 0.4 }}>
-          <CapDoodle className="w-28 h-24" />
-        </div>
-
-        <div className="relative mx-auto max-w-3xl px-6 text-center">
-          <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl"
-              style={{ background: BRAND.lightBg }}>
-              <Sparkles className="h-6 w-6" style={{ color: BRAND.deep }} />
+            {/* Text + buttons */}
+            <div className="flex flex-col justify-center py-24 pr-0 md:pr-12">
+              <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl"
+                style={{ background: "white", boxShadow: "0 4px 20px rgba(91,111,212,0.12)" }}>
+                <Sparkles className="h-6 w-6" style={{ color: BRAND.deep }} />
+              </div>
+              <h2 className="text-4xl font-extrabold md:text-[52px] leading-tight mb-5" style={{ color: BRAND.deep }}>
+                Your next<br />breakthrough<br />starts here.
+              </h2>
+              <p className="text-base mb-10 max-w-md" style={{ color: "#666" }}>
+                Join thousands of students who stopped struggling alone. Find your tutor, book in minutes.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/register">
+                  <Button size="lg" className="gap-2 px-10 py-6 text-base font-bold border-0 bg-primary text-primary-foreground"
+                    data-testid="button-final-cta">
+                    Create free account
+                  </Button>
+                </Link>
+                <Link href="/tutors">
+                  <Button size="lg" variant="outline" className="gap-2 px-10 py-6 text-base font-semibold"
+                    style={{ borderColor: `rgba(91,111,212,0.3)`, color: BRAND.deep }}>
+                    Browse tutors
+                  </Button>
+                </Link>
+              </div>
             </div>
-            <h2 className="text-4xl font-extrabold md:text-[56px] leading-tight mb-5" style={{ color: BRAND.deep }}>
-              Your next breakthrough
-              <br />starts here.
-            </h2>
-            <p className="text-base mb-10 max-w-lg mx-auto" style={{ color: "#666" }}>
-              Join thousands of students who stopped struggling alone. Find your tutor, book in minutes.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/register">
-                <Button size="lg" className="gap-2 px-10 py-6 text-base font-bold border-0 bg-primary text-primary-foreground"
-                  data-testid="button-final-cta">
-                  Create free account
-                </Button>
-              </Link>
-              <Link href="/tutors">
-                <Button size="lg" variant="outline" className="gap-2 px-10 py-6 text-base font-semibold"
-                  style={{ borderColor: `rgba(91,111,212,0.3)`, color: BRAND.deep }}>
-                  Browse tutors
-                </Button>
-              </Link>
+
+            {/* Illustration */}
+            <div className="relative hidden md:flex items-end justify-end overflow-hidden">
+              <img
+                src="/illus-study.png"
+                alt="Student studying"
+                className="h-full max-h-[520px] w-full object-cover object-left-bottom"
+                style={{ maskImage: "linear-gradient(to bottom, transparent 0%, black 20%)" }}
+              />
             </div>
           </motion.div>
         </div>
