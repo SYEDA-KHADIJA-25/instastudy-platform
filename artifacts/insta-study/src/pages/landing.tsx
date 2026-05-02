@@ -217,8 +217,7 @@ export default function LandingPage() {
             </Button>
           </Link>
           <Link href="/register">
-            <Button size="sm" className="border-0 font-semibold"
-              style={{ background: BRAND.deep, color: "#fff", boxShadow: "0 2px 12px rgba(51,0,111,0.4)" }}>
+            <Button size="sm" className="border-0 font-semibold bg-gradient-to-br from-primary to-secondary text-primary-foreground">
               Get started
             </Button>
           </Link>
@@ -300,8 +299,7 @@ export default function LandingPage() {
           >
             <Link href="/register">
               <Button size="lg"
-                className="gap-2 px-8 py-5 text-sm font-bold border-0 h-auto"
-                style={{ background: BRAND.deep, color: "#fff", boxShadow: "0 4px 24px rgba(51,0,111,0.55)" }}
+                className="gap-2 px-8 py-5 text-sm font-bold border-0 h-auto bg-gradient-to-br from-primary to-secondary text-primary-foreground"
                 data-testid="button-cta-get-started">
                 Find a tutor <ChevronRight className="h-3.5 w-3.5" />
               </Button>
@@ -624,8 +622,7 @@ export default function LandingPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link href="/register">
-                <Button size="lg" className="gap-2 px-10 py-6 text-base font-bold border-0"
-                  style={{ background: BRAND.deep, color: "#fff", boxShadow: "0 6px 28px rgba(51,0,111,0.4)" }}
+                <Button size="lg" className="gap-2 px-10 py-6 text-base font-bold border-0 bg-gradient-to-br from-primary to-secondary text-primary-foreground"
                   data-testid="button-final-cta">
                   Create free account
                 </Button>
