@@ -257,29 +257,25 @@ export default function LandingPage() {
 
             {/* Headline */}
             <motion.h1
-              className="font-black leading-[1.0] tracking-[-0.03em]"
-              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "clamp(42px, 5.5vw, 76px)", color: BRAND.deep }}
+              className="font-black leading-[1.08] tracking-[-0.03em]"
+              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "clamp(38px, 4.5vw, 64px)", color: "#0f0520" }}
               initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.1 }}
             >
-              The smarter way<br />
-              <span className="relative">
-                to master{" "}
-                <span style={{
-                  background: `linear-gradient(120deg, ${BRAND.deep} 0%, #6600cc 50%, ${BRAND.deep} 100%)`,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}>
-                  any subject.
-                </span>
+              The smarter way<br />to master{" "}
+              <span style={{
+                background: `linear-gradient(120deg, ${BRAND.deep} 0%, #7c3aed 100%)`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}>
+                any subject.
               </span>
             </motion.h1>
 
             {/* Sub-headline */}
             <motion.p
-              className="mt-7 text-[17px] leading-[1.75] max-w-[440px] font-normal"
-              style={{ color: "rgba(51,0,111,0.5)", letterSpacing: "0.01em" }}
+              className="mt-6 text-[17px] leading-[1.7] max-w-[420px] font-normal text-gray-500"
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.25 }}
             >
