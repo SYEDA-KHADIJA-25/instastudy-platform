@@ -170,16 +170,8 @@ export default function LandingPage() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
-  const d1Y = useTransform(scrollYProgress, [0, 0.4], [0, -160]);
-  const d2Y = useTransform(scrollYProgress, [0, 0.4], [0, -110]);
-  const d3Y = useTransform(scrollYProgress, [0, 0.4], [0, -200]);
-  const d4Y = useTransform(scrollYProgress, [0, 0.4], [0, -90]);
-  const d5Y = useTransform(scrollYProgress, [0, 0.4], [0, -140]);
-  const d6Y = useTransform(scrollYProgress, [0, 0.4], [0, -80]);
-  const d7Y = useTransform(scrollYProgress, [0, 0.4], [0, -180]);
-
-  const heroTextY = useTransform(scrollYProgress, [0, 0.3], [0, 60]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.32], [1, 0]);
+  const heroY = useTransform(scrollYProgress, [0, 0.3], [0, 60]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
 
   return (
     <div className="relative min-h-screen">
@@ -237,148 +229,249 @@ export default function LandingPage() {
           HERO
       ══════════════════════════════════════════ */}
       <section
-        className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
+        className="relative min-h-screen flex items-center overflow-hidden"
         style={{ background: BRAND.darkBg }}
       >
-        <div className="absolute inset-0 hero-grid-bg" />
+        {/* Dot grid */}
+        <div className="absolute inset-0 hero-grid-bg opacity-70" />
         <div className="absolute inset-0 noise-overlay" />
 
-        {/* Single subtle glow — not multi-layer gradient */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
-          style={{ background: `radial-gradient(circle, rgba(51,0,111,0.5) 0%, transparent 70%)`, filter: "blur(60px)" }} />
+        {/* Two intentional glows — anchored, not scattered */}
+        <div className="absolute -top-32 -left-32 w-[700px] h-[700px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(51,0,111,0.55) 0%, transparent 65%)", filter: "blur(72px)" }} />
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(139,123,255,0.14) 0%, transparent 70%)", filter: "blur(60px)" }} />
 
-        {/* Floating doodles — lavender on dark bg */}
-        <motion.div className="absolute top-[11%] left-[5%] animate-float pointer-events-none"
-          style={{ y: d1Y, color: BRAND.lavender, opacity: 0.35 }}>
-          <BookDoodle className="w-28 h-20" />
-        </motion.div>
+        {/* Fine horizontal rule — top edge texture */}
+        <div className="absolute top-0 left-0 right-0 h-px"
+          style={{ background: `linear-gradient(to right, transparent 0%, rgba(205,172,219,0.2) 40%, rgba(205,172,219,0.2) 60%, transparent 100%)` }} />
 
-        <motion.div className="absolute top-[7%] right-[7%] animate-spin-slow pointer-events-none"
-          style={{ y: d2Y, color: BRAND.lavender, opacity: 0.28 }}>
-          <AtomDoodle className="w-32 h-32" />
-        </motion.div>
-
-        <motion.div className="absolute bottom-[24%] left-[9%] animate-float-slow pointer-events-none"
-          style={{ y: d3Y, color: BRAND.lavender, opacity: 0.28 }}>
-          <BulbDoodle className="w-18 h-26" />
-        </motion.div>
-
-        <motion.div className="absolute bottom-[16%] right-[6%] animate-float-drift pointer-events-none"
-          style={{ y: d4Y, color: BRAND.lavender, opacity: 0.32 }}>
-          <CapDoodle className="w-28 h-22" />
-        </motion.div>
-
-        <motion.div className="absolute top-[32%] right-[13%] animate-float-bob pointer-events-none"
-          style={{ y: d5Y, color: BRAND.lavender, opacity: 0.25 }}>
-          <PencilDoodle className="w-9 h-24" />
-        </motion.div>
-
-        <motion.div className="absolute top-[56%] left-[12%] animate-float pointer-events-none"
-          style={{ y: d6Y, color: BRAND.lavender, opacity: 0.28, animationDelay: "1s" }}>
-          <FormulaDoodle className="w-32 h-12" />
-        </motion.div>
-
-        <motion.div className="absolute top-[19%] left-[38%] animate-float-slow pointer-events-none"
-          style={{ y: d7Y, color: BRAND.lavender, opacity: 0.2 }}>
-          <SparkDoodle className="w-8 h-8" />
-        </motion.div>
-
-        <motion.div className="absolute bottom-[28%] right-[22%] animate-float pointer-events-none"
-          style={{ y: d2Y, color: BRAND.lavender, opacity: 0.2, animationDelay: "2s" }}>
-          <SparkDoodle className="w-6 h-6" />
-        </motion.div>
-
-        <motion.div className="absolute top-[44%] right-[26%] animate-float-drift pointer-events-none"
-          style={{ y: d5Y, color: BRAND.lavender, opacity: 0.22 }}>
-          <CompassDoodle className="w-14 h-20" />
-        </motion.div>
-
-        <motion.div className="absolute bottom-[38%] left-[26%] animate-float-bob pointer-events-none"
-          style={{ y: d3Y, color: BRAND.lavender, opacity: 0.2, animationDelay: "3s" }}>
-          <CalculatorDoodle className="w-12 h-16" />
-        </motion.div>
-
-        {/* Content */}
+        {/* ── Split layout ── */}
         <motion.div
-          className="relative z-10 mx-auto max-w-4xl px-6 text-center"
-          style={{ y: heroTextY, opacity: heroOpacity }}
+          className="relative z-10 mx-auto w-full max-w-7xl px-8 md:px-12 pt-24 pb-16 grid md:grid-cols-[1fr_480px] gap-12 lg:gap-20 items-center"
+          style={{ y: heroY, opacity: heroOpacity }}
         >
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55 }}>
-            <span className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-widest uppercase mb-8"
-              style={{ background: "rgba(205,172,219,0.12)", border: `1px solid rgba(205,172,219,0.3)`, color: BRAND.lavender }}>
-              <Sparkles className="h-3 w-3" />
-              Peer-to-peer tutoring — reimagined
-            </span>
-          </motion.div>
+          {/* LEFT: Copy */}
+          <div className="flex flex-col">
 
-          <motion.h1
-            className="text-5xl font-extrabold tracking-tight text-white md:text-7xl lg:text-[82px] leading-[0.95]"
-            initial={{ opacity: 0, y: 36 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.1 }}
-          >
-            Learn from people
-            <br />
-            <span style={{ color: BRAND.lavender }}>who actually get it.</span>
-          </motion.h1>
-
-          <motion.p
-            className="mx-auto mt-7 max-w-xl text-lg leading-relaxed"
-            style={{ color: "rgba(255,255,255,0.5)" }}
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.25 }}
-          >
-            Connect with verified peer tutors across any subject. Book sessions, grow
-            your knowledge — or share what you know and earn.
-          </motion.p>
-
-          <motion.div
-            className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.38 }}
-          >
-            <Link href="/register">
-              <Button size="lg" className="gap-2 px-9 py-6 text-base font-bold border-0"
-                style={{ background: BRAND.deep, color: "#fff", boxShadow: "0 6px 28px rgba(51,0,111,0.45)" }}
-                data-testid="button-cta-get-started">
-                Find a tutor <ChevronRight className="h-4 w-4" />
-              </Button>
-            </Link>
-            <Link href="/register">
-              <Button size="lg" variant="outline"
-                className="gap-2 px-9 py-6 text-base font-semibold"
-                style={{ borderColor: "rgba(205,172,219,0.4)", color: BRAND.lavender, background: "transparent" }}
-                data-testid="button-cta-become-tutor">
-                Become a tutor
-              </Button>
-            </Link>
-          </motion.div>
-
-          <motion.div
-            className="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm"
-            style={{ color: "rgba(255,255,255,0.35)" }}
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
-          >
-            {["No subscription required", "Verified tutors only", "Flexible scheduling"].map((t) => (
-              <span key={t} className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4" style={{ color: BRAND.lavender, opacity: 0.7 }} />
-                {t}
+            {/* Eyebrow badge */}
+            <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+              <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-[11px] font-bold tracking-widest uppercase mb-9"
+                style={{ background: "rgba(205,172,219,0.09)", border: "1px solid rgba(205,172,219,0.22)", color: BRAND.lavender }}>
+                <span className="h-1.5 w-1.5 rounded-full animate-pulse-glow" style={{ background: BRAND.lavender }} />
+                Verified peer tutors
               </span>
-            ))}
-          </motion.div>
+            </motion.div>
+
+            {/* Headline */}
+            <motion.h1
+              className="font-extrabold tracking-tight text-white leading-[1.02]"
+              style={{ fontSize: "clamp(44px, 5.5vw, 72px)" }}
+              initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.1 }}
+            >
+              The smarter way<br />
+              to master{" "}
+              <span className="relative inline-block">
+                <span style={{ color: BRAND.lavender }}>any subject.</span>
+                {/* Underline accent */}
+                <motion.span
+                  className="absolute -bottom-1 left-0 right-0 h-[3px] rounded-full"
+                  style={{ background: `linear-gradient(to right, ${BRAND.lavender}, transparent)` }}
+                  initial={{ scaleX: 0, originX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.7, delay: 0.8 }}
+                />
+              </span>
+            </motion.h1>
+
+            {/* Sub-headline */}
+            <motion.p
+              className="mt-6 text-base leading-relaxed max-w-md"
+              style={{ color: "rgba(255,255,255,0.42)" }}
+              initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.25 }}
+            >
+              Connect with peer tutors who've mastered what you're learning.
+              Book a session in minutes — or earn by sharing what you know.
+            </motion.p>
+
+            {/* CTA row */}
+            <motion.div
+              className="mt-9 flex items-center gap-4 flex-wrap"
+              initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.36 }}
+            >
+              <Link href="/register">
+                <Button size="lg"
+                  className="gap-2 px-8 py-5 text-sm font-bold border-0 h-auto"
+                  style={{ background: BRAND.deep, color: "#fff", boxShadow: "0 4px 24px rgba(51,0,111,0.55)" }}
+                  data-testid="button-cta-get-started">
+                  Find a tutor <ChevronRight className="h-3.5 w-3.5" />
+                </Button>
+              </Link>
+              <Link href="/register">
+                <button
+                  className="flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-80"
+                  style={{ color: "rgba(255,255,255,0.5)" }}
+                  data-testid="button-cta-become-tutor"
+                >
+                  Become a tutor
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </button>
+              </Link>
+            </motion.div>
+
+            {/* Social proof */}
+            <motion.div
+              className="mt-10 flex items-center gap-4"
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.55 }}
+            >
+              <div className="flex -space-x-2.5">
+                {["S", "M", "A", "R", "K"].map((l, i) => (
+                  <div key={l}
+                    className="flex h-8 w-8 items-center justify-center rounded-full border-2 text-[11px] font-bold text-white"
+                    style={{
+                      background: `hsl(${265 + i * 18}, 70%, ${30 + i * 6}%)`,
+                      borderColor: BRAND.darkBg,
+                    }}>
+                    {l}
+                  </div>
+                ))}
+              </div>
+              <div className="text-xs leading-snug" style={{ color: "rgba(255,255,255,0.38)" }}>
+                <span className="font-semibold text-white">500+</span> active tutors ·{" "}
+                <span className="font-semibold text-white">4.8★</span> avg rating
+              </div>
+            </motion.div>
+          </div>
+
+          {/* RIGHT: Product mockup */}
+          <div className="relative hidden md:flex items-center justify-center min-h-[420px]">
+
+            {/* Tutor card — main */}
+            <motion.div
+              className="relative z-10 w-full max-w-[340px] rounded-2xl p-5"
+              style={{
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(205,172,219,0.18)",
+                backdropFilter: "blur(20px)",
+                boxShadow: "0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(205,172,219,0.06)",
+              }}
+              initial={{ opacity: 0, x: 36, y: 16 }} animate={{ opacity: 1, x: 0, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {/* Top accent line */}
+              <div className="absolute top-0 left-6 right-6 h-px rounded-full"
+                style={{ background: `linear-gradient(to right, transparent, ${BRAND.lavender}55, transparent)` }} />
+
+              <div className="flex items-center gap-3.5 mb-4">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-base font-bold text-white"
+                  style={{ background: BRAND.deep }}>S</div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-white text-sm">Sophia K.</div>
+                  <div className="flex items-center gap-1 mt-0.5">
+                    {[...Array(5)].map((_, i) => <Star key={i} className="h-2.5 w-2.5 fill-amber-400 text-amber-400" />)}
+                    <span className="text-xs ml-1" style={{ color: "rgba(255,255,255,0.35)" }}>4.9 (128)</span>
+                  </div>
+                </div>
+                <span className="shrink-0 text-sm font-bold tabular-nums" style={{ color: BRAND.lavender }}>$42/hr</span>
+              </div>
+
+              <p className="text-xs leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.42)" }}>
+                PhD candidate in Mathematics at Stanford. Specialises in Calculus,
+                Linear Algebra and Statistics.
+              </p>
+
+              <div className="flex flex-wrap gap-1.5 mb-5">
+                {["Calculus", "Statistics", "Linear Algebra"].map((s) => (
+                  <span key={s} className="rounded-full px-2.5 py-0.5 text-[11px] font-medium"
+                    style={{ background: "rgba(205,172,219,0.1)", color: BRAND.lavender }}>
+                    {s}
+                  </span>
+                ))}
+              </div>
+
+              {/* Availability row */}
+              <div className="flex items-center gap-2 mb-4 p-3 rounded-xl"
+                style={{ background: "rgba(205,172,219,0.06)", border: "1px solid rgba(205,172,219,0.1)" }}>
+                <Clock className="h-3.5 w-3.5 shrink-0" style={{ color: BRAND.lavender, opacity: 0.7 }} />
+                <span className="text-[11px]" style={{ color: "rgba(255,255,255,0.4)" }}>Next available:</span>
+                <span className="text-[11px] font-semibold text-white ml-auto">Today · 3:00 PM</span>
+              </div>
+
+              <Button size="sm" className="w-full border-0 text-white font-semibold text-xs h-8"
+                style={{ background: BRAND.deep }}>
+                Book session
+              </Button>
+            </motion.div>
+
+            {/* Floating review card — bottom-left */}
+            <motion.div
+              className="absolute bottom-2 -left-10 z-20 rounded-xl px-4 py-3"
+              style={{
+                background: "rgba(12,4,28,0.9)",
+                border: "1px solid rgba(205,172,219,0.15)",
+                backdropFilter: "blur(16px)",
+                boxShadow: "0 16px 40px rgba(0,0,0,0.4)",
+              }}
+              initial={{ opacity: 0, x: -20, y: 16 }} animate={{ opacity: 1, x: 0, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div className="flex gap-0.5 mb-1.5">
+                {[...Array(5)].map((_, i) => <Star key={i} className="h-2.5 w-2.5 fill-amber-400 text-amber-400" />)}
+              </div>
+              <p className="text-xs font-medium text-white">"Finally understood derivatives!"</p>
+              <p className="text-[10px] mt-1" style={{ color: "rgba(255,255,255,0.32)" }}>Marcus L. · 2 hrs ago</p>
+            </motion.div>
+
+            {/* Session booked pill — top-right */}
+            <motion.div
+              className="absolute -top-4 right-0 z-20 flex items-center gap-2 rounded-full px-4 py-2"
+              style={{
+                background: "#0d1f12",
+                border: "1px solid rgba(52,211,153,0.3)",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
+              }}
+              initial={{ opacity: 0, scale: 0.85, y: -8 }} animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.95, type: "spring", stiffness: 200 }}
+            >
+              <span className="h-2 w-2 rounded-full bg-emerald-400" />
+              <span className="text-xs font-semibold text-emerald-400">Session booked</span>
+            </motion.div>
+
+            {/* Students online pill — right side */}
+            <motion.div
+              className="absolute top-1/2 -right-8 z-20 flex items-center gap-2 rounded-full px-3.5 py-2"
+              style={{
+                background: "rgba(12,4,28,0.9)",
+                border: "1px solid rgba(205,172,219,0.15)",
+                backdropFilter: "blur(12px)",
+              }}
+              initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 1.1 }}
+            >
+              <Users className="h-3.5 w-3.5" style={{ color: BRAND.lavender }} />
+              <span className="text-[11px] font-semibold" style={{ color: BRAND.lavender }}>240 online</span>
+            </motion.div>
+
+            {/* Subtle background glow behind card */}
+            <div className="absolute inset-0 pointer-events-none rounded-3xl"
+              style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(51,0,111,0.25) 0%, transparent 70%)", filter: "blur(24px)" }} />
+          </div>
         </motion.div>
 
-        {/* Scroll hint */}
+        {/* Scroll indicator */}
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce-gentle"
-          style={{ color: "rgba(205,172,219,0.4)" }}
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5"
+          style={{ color: "rgba(205,172,219,0.3)" }}
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.3 }}
         >
-          <span className="text-[10px] tracking-widest uppercase font-semibold">Scroll</span>
-          <ArrowDown className="h-4 w-4" />
+          <span className="text-[9px] tracking-widest uppercase font-semibold">Scroll</span>
+          <ArrowDown className="h-3.5 w-3.5 animate-bounce-gentle" />
         </motion.div>
 
-        <div className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none"
+        <div className="absolute bottom-0 left-0 right-0 h-28 pointer-events-none"
           style={{ background: `linear-gradient(to bottom, transparent, ${BRAND.darkBg})` }} />
       </section>
 
