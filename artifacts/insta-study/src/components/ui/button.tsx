@@ -11,9 +11,9 @@ const buttonVariants = cva(
       variant: {
         default:
           "rounded-lg bg-primary text-primary-foreground " +
-          "shadow-[0_2px_0_rgba(0,0,0,0.25),0_4px_16px_rgba(51,0,111,0.35)] " +
-          "hover:brightness-110 hover:shadow-[0_4px_4px_rgba(0,0,0,0.2),0_6px_20px_rgba(51,0,111,0.45)] hover:-translate-y-px " +
-          "active:translate-y-px active:shadow-[0_1px_2px_rgba(0,0,0,0.2),0_2px_8px_rgba(51,0,111,0.3)] active:brightness-95",
+          "shadow-[0_2px_0_rgba(0,0,0,0.25),0_4px_16px_rgba(91,111,212,0.35)] " +
+          "hover:brightness-110 hover:shadow-[0_4px_4px_rgba(0,0,0,0.2),0_6px_20px_rgba(91,111,212,0.45)] hover:-translate-y-px " +
+          "active:translate-y-px active:shadow-[0_1px_2px_rgba(0,0,0,0.2),0_2px_8px_rgba(91,111,212,0.3)] active:brightness-95",
         destructive:
           "rounded-lg bg-destructive text-destructive-foreground " +
           "shadow-[0_2px_0_rgba(0,0,0,0.2),0_4px_14px_rgba(239,68,68,0.3)] " +

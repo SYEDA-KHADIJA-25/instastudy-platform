@@ -39,7 +39,7 @@ const BRAND = {
   peach:      "#EDBA96",   // warm peach — accent
   navy:       "#0f1240",   // deep navy — dark text
   lightBg:    "#EEF2FF",   // very light blue-white — tinted sections
-  darkBg:     "#1a1f4e",   // deep navy — dark sections / footer
+  darkBg:     "#1e2d87",   // deep cornflower blue — dark sections / footer
   // legacy aliases kept for references below
   lavender:   "#EDBA96",
   pink:       "#EDBA96",
@@ -176,16 +176,16 @@ const SUBJECTS = [
 function Marquee() {
   const repeated = [...SUBJECTS, ...SUBJECTS];
   return (
-    <div className="overflow-hidden py-3 border-y" style={{ background: BRAND.deep, borderColor: "rgba(205,172,219,0.12)" }}>
+    <div className="overflow-hidden py-3 border-y" style={{ background: BRAND.deep, borderColor: "rgba(91,111,212,0.35)" }}>
       <div className="flex animate-marquee whitespace-nowrap" style={{ width: "max-content" }}>
         {repeated.map((s, i) => {
           const Icon = s.icon;
           return (
             <span key={i} className="inline-flex items-center gap-2 mx-7 text-[13px] font-medium tracking-wide"
-              style={{ color: "rgba(205,172,219,0.75)" }}>
+              style={{ color: "rgba(255,255,255,0.75)" }}>
               <Icon className="h-3.5 w-3.5" style={{ color: BRAND.lavender }} />
               {s.label}
-              <span className="ml-3 h-1 w-1 rounded-full inline-block" style={{ background: "rgba(205,172,219,0.25)" }} />
+              <span className="ml-3 h-1 w-1 rounded-full inline-block" style={{ background: "rgba(255,255,255,0.3)" }} />
             </span>
           );
         })}
@@ -386,7 +386,7 @@ export default function LandingPage() {
               <motion.div key={f.title} initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}>
                 <div className="group relative h-full rounded-2xl p-6 overflow-hidden border transition-all hover:shadow-xl hover:-translate-y-1"
-                  style={{ background: f.bg, borderColor: `rgba(205,172,219,0.35)` }}>
+                  style={{ background: f.bg, borderColor: `rgba(91,111,212,0.18)` }}>
                   <div className="absolute top-4 right-4 transition-opacity opacity-30 group-hover:opacity-60"
                     style={{ color: BRAND.deep }}>
                     {f.doodle}
@@ -423,7 +423,7 @@ export default function LandingPage() {
 
           <div className="relative">
             <div className="hidden md:block absolute top-[52px] left-[16.67%] right-[16.67%] h-px border-t-2 border-dashed"
-              style={{ borderColor: `rgba(205,172,219,0.6)` }} />
+              style={{ borderColor: `rgba(91,111,212,0.3)` }} />
 
             <div className="grid gap-12 md:grid-cols-3">
               {[
@@ -476,7 +476,7 @@ export default function LandingPage() {
               </div>
               <Link href="/tutors">
                 <Button variant="outline" size="sm" className="gap-1 hidden md:flex"
-                  style={{ borderColor: `rgba(51,0,111,0.25)`, color: BRAND.deep }}>
+                  style={{ borderColor: `rgba(91,111,212,0.3)`, color: BRAND.deep }}>
                   View all <ChevronRight className="h-3 w-3" />
                 </Button>
               </Link>
@@ -488,7 +488,7 @@ export default function LandingPage() {
                   whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}>
                   <Card className="group overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1"
-                    style={{ border: `1px solid rgba(205,172,219,0.4)` }}>
+                    style={{ border: `1px solid rgba(91,111,212,0.18)` }}>
                     <div className="h-1.5 w-full" style={{ background: BRAND.deep }} />
                     <CardContent className="p-5">
                       <div className="flex items-start gap-4">
@@ -525,7 +525,7 @@ export default function LandingPage() {
 
                       <Link href={`/tutors/${tutor.id}`} className="block mt-4">
                         <Button variant="outline" size="sm" className="w-full font-semibold transition-all"
-                          style={{ borderColor: `rgba(51,0,111,0.3)`, color: BRAND.deep }}
+                          style={{ borderColor: `rgba(91,111,212,0.3)`, color: BRAND.deep }}
                           data-testid={`button-view-tutor-${tutor.id}`}>
                           View profile
                         </Button>
@@ -576,7 +576,7 @@ export default function LandingPage() {
               <motion.div key={t.name} initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.12 }}>
                 <div className="h-full rounded-2xl p-6 flex flex-col"
-                  style={{ background: "rgba(255,255,255,0.06)", border: `1px solid rgba(205,172,219,0.2)`, backdropFilter: "blur(8px)" }}>
+                  style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.14)", backdropFilter: "blur(8px)" }}>
                   <div className="text-4xl font-serif mb-4 leading-none" style={{ color: BRAND.lavender, opacity: 0.5 }}>"</div>
                   <p className="text-sm leading-relaxed flex-1 italic" style={{ color: "rgba(255,255,255,0.65)" }}>{t.text}</p>
                   <div className="mt-6 flex items-center gap-3">
@@ -641,7 +641,7 @@ export default function LandingPage() {
               </Link>
               <Link href="/tutors">
                 <Button size="lg" variant="outline" className="gap-2 px-10 py-6 text-base font-semibold"
-                  style={{ borderColor: `rgba(51,0,111,0.3)`, color: BRAND.deep }}>
+                  style={{ borderColor: `rgba(91,111,212,0.3)`, color: BRAND.deep }}>
                   Browse tutors
                 </Button>
               </Link>
