@@ -265,46 +265,42 @@ export default function LandingPage() {
           backgroundPosition: "center top",
         }}
       >
-        {/* Left-column dark fade — clean gradient that stops at ~55% so the right illustration shows fully */}
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: "linear-gradient(105deg, rgba(8,0,18,0.88) 0%, rgba(8,0,18,0.72) 30%, rgba(8,0,18,0.22) 52%, transparent 67%)" }} />
-
-        {/* ── Content — vertically centered, left column only ── */}
+        {/* ── Content — centered in the open white middle area ── */}
         <motion.div
-          className="relative z-10 w-full max-w-6xl mx-auto px-8 md:px-14 flex items-center"
+          className="relative z-10 w-full max-w-6xl mx-auto px-8 md:px-14 flex flex-col items-center justify-center text-center"
           style={{ y: heroY, opacity: heroOpacity, minHeight: "100vh" }}
         >
-          <div className="flex flex-col items-start text-left max-w-[520px]">
+          <div className="flex flex-col items-center max-w-[600px]">
             {/* Eyebrow badge */}
             <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-              <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-[11px] font-bold tracking-widest uppercase mb-9"
-                style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.25)", color: "rgba(255,255,255,0.9)" }}>
-                <span className="h-1.5 w-1.5 rounded-full animate-pulse-glow" style={{ background: BRAND.lavender }} />
+              <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-[11px] font-bold tracking-widest uppercase mb-8"
+                style={{ background: "rgba(51,0,111,0.07)", border: "1px solid rgba(51,0,111,0.18)", color: BRAND.deep }}>
+                <span className="h-1.5 w-1.5 rounded-full animate-pulse-glow" style={{ background: BRAND.deep }} />
                 Verified peer tutors
               </span>
             </motion.div>
 
             {/* Headline */}
             <motion.h1
-              className="font-black leading-[1.08] tracking-[-0.03em] text-white"
-              style={{
-                fontFamily: "'Plus Jakarta Sans', sans-serif",
-                fontSize: "clamp(38px, 4.5vw, 66px)",
-                textShadow: "0 2px 24px rgba(8,0,18,0.7), 0 1px 4px rgba(8,0,18,0.9)",
-              }}
+              className="font-black leading-[1.08] tracking-[-0.03em]"
+              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "clamp(38px, 5vw, 68px)", color: "#0f0520" }}
               initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.1 }}
             >
               The smarter way<br />to master{" "}
-              <span style={{ color: BRAND.lavender }}>
+              <span style={{
+                background: `linear-gradient(120deg, ${BRAND.deep} 0%, #7c3aed 100%)`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}>
                 any subject.
               </span>
             </motion.h1>
 
             {/* Sub-headline */}
             <motion.p
-              className="mt-6 text-[17px] leading-[1.7] max-w-[440px] font-semibold"
-              style={{ color: "rgba(255,255,255,0.92)", textShadow: "0 1px 12px rgba(8,0,18,0.85), 0 1px 3px rgba(8,0,18,1)" }}
+              className="mt-6 text-[17px] leading-[1.7] max-w-[460px] font-normal text-gray-500"
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.25 }}
             >
@@ -314,27 +310,19 @@ export default function LandingPage() {
 
             {/* CTA row */}
             <motion.div
-              className="mt-10 flex items-center gap-4 flex-wrap"
+              className="mt-10 flex items-center gap-4 flex-wrap justify-center"
               initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.36 }}
             >
               <Link href="/register">
-                <Button
-                  size="lg"
-                  className="gap-2 px-7 h-12 text-[15px]"
-                  data-testid="button-cta-get-started"
-                >
+                <Button size="lg" className="gap-2 px-7 h-12 text-[15px]" data-testid="button-cta-get-started">
                   Find a tutor <ChevronRight className="h-4 w-4" />
                 </Button>
               </Link>
               <Link href="/register">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="gap-2 px-7 h-12 text-[15px]"
-                  style={{ borderColor: "rgba(255,255,255,0.35)", color: "white", background: "rgba(255,255,255,0.08)" }}
-                  data-testid="button-cta-become-tutor"
-                >
+                <Button size="lg" variant="outline" className="gap-2 px-7 h-12 text-[15px]"
+                  style={{ borderColor: "rgba(51,0,111,0.2)", color: BRAND.deep }}
+                  data-testid="button-cta-become-tutor">
                   Become a tutor <ChevronRight className="h-4 w-4" />
                 </Button>
               </Link>
