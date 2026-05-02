@@ -247,73 +247,90 @@ export default function LandingPage() {
 
         {/* ── Split layout ── */}
         <motion.div
-          className="relative z-10 mx-auto w-full max-w-4xl px-8 md:px-12 pt-32 pb-20 flex flex-col items-center text-center"
+          className="relative z-10 mx-auto w-full max-w-6xl px-8 md:px-12 pt-32 pb-20 flex flex-col md:flex-row items-center gap-12"
           style={{ y: heroY, opacity: heroOpacity }}
         >
-          {/* Eyebrow badge */}
-          <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-[11px] font-bold tracking-widest uppercase mb-9"
-              style={{ background: "rgba(205,172,219,0.09)", border: "1px solid rgba(205,172,219,0.22)", color: BRAND.lavender }}>
-              <span className="h-1.5 w-1.5 rounded-full animate-pulse-glow" style={{ background: BRAND.lavender }} />
-              Verified peer tutors
-            </span>
-          </motion.div>
+          {/* LEFT: Copy */}
+          <div className="flex-1 flex flex-col items-start text-left">
+            {/* Eyebrow badge */}
+            <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+              <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-[11px] font-bold tracking-widest uppercase mb-9"
+                style={{ background: "rgba(205,172,219,0.09)", border: "1px solid rgba(205,172,219,0.22)", color: BRAND.lavender }}>
+                <span className="h-1.5 w-1.5 rounded-full animate-pulse-glow" style={{ background: BRAND.lavender }} />
+                Verified peer tutors
+              </span>
+            </motion.div>
 
-          {/* Headline */}
-          <motion.h1
-            className="font-extrabold tracking-tight text-white leading-[1.02] w-full"
-            style={{ fontSize: "clamp(44px, 6vw, 80px)" }}
-            initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.1 }}
-          >
-            The smarter way<br />
-            to master{" "}
-            <span className="relative inline-block">
-              <span style={{ color: BRAND.lavender }}>any subject.</span>
-              <motion.span
-                className="absolute -bottom-1 left-0 right-0 h-[3px] rounded-full"
-                style={{ background: `linear-gradient(to right, ${BRAND.lavender}, transparent)` }}
-                initial={{ scaleX: 0, originX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.7, delay: 0.8 }}
-              />
-            </span>
-          </motion.h1>
+            {/* Headline */}
+            <motion.h1
+              className="font-extrabold tracking-tight text-white leading-[1.02]"
+              style={{ fontSize: "clamp(40px, 5vw, 72px)" }}
+              initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.1 }}
+            >
+              The smarter way<br />
+              to master{" "}
+              <span className="relative inline-block">
+                <span style={{ color: BRAND.lavender }}>any subject.</span>
+                <motion.span
+                  className="absolute -bottom-1 left-0 right-0 h-[3px] rounded-full"
+                  style={{ background: `linear-gradient(to right, ${BRAND.lavender}, transparent)` }}
+                  initial={{ scaleX: 0, originX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.7, delay: 0.8 }}
+                />
+              </span>
+            </motion.h1>
 
-          {/* Sub-headline */}
-          <motion.p
-            className="mt-6 text-base leading-relaxed max-w-lg"
-            style={{ color: "rgba(255,255,255,0.42)" }}
-            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.25 }}
-          >
-            Connect with peer tutors who've mastered what you're learning.
-            Book a session in minutes — or earn by sharing what you know.
-          </motion.p>
+            {/* Sub-headline */}
+            <motion.p
+              className="mt-6 text-base leading-relaxed max-w-md"
+              style={{ color: "rgba(255,255,255,0.42)" }}
+              initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.25 }}
+            >
+              Connect with peer tutors who've mastered what you're learning.
+              Book a session in minutes — or earn by sharing what you know.
+            </motion.p>
 
-          {/* CTA row */}
+            {/* CTA row */}
+            <motion.div
+              className="mt-9 flex items-center gap-5 flex-wrap"
+              initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.36 }}
+            >
+              <Link href="/register">
+                <Button size="lg"
+                  className="gap-2 px-8 py-5 text-sm font-bold border-0 h-auto bg-gradient-to-br from-primary to-secondary text-primary-foreground"
+                  data-testid="button-cta-get-started">
+                  Find a tutor <ChevronRight className="h-3.5 w-3.5" />
+                </Button>
+              </Link>
+              <Link href="/register">
+                <button
+                  className="flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-80"
+                  style={{ color: "rgba(255,255,255,0.5)" }}
+                  data-testid="button-cta-become-tutor"
+                >
+                  Become a tutor
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </button>
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* RIGHT: Illustration */}
           <motion.div
-            className="mt-9 flex items-center justify-center gap-5 flex-wrap"
-            initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.36 }}
+            className="flex-1 flex items-center justify-center"
+            initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
           >
-            <Link href="/register">
-              <Button size="lg"
-                className="gap-2 px-8 py-5 text-sm font-bold border-0 h-auto bg-gradient-to-br from-primary to-secondary text-primary-foreground"
-                data-testid="button-cta-get-started">
-                Find a tutor <ChevronRight className="h-3.5 w-3.5" />
-              </Button>
-            </Link>
-            <Link href="/register">
-              <button
-                className="flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-80"
-                style={{ color: "rgba(255,255,255,0.5)" }}
-                data-testid="button-cta-become-tutor"
-              >
-                Become a tutor
-                <ChevronRight className="h-3.5 w-3.5" />
-              </button>
-            </Link>
+            <img
+              src="/hero-doodle.png"
+              alt="Peer tutoring illustration"
+              className="w-full max-w-md drop-shadow-2xl animate-float-y"
+              style={{ filter: "drop-shadow(0 0 40px rgba(205,172,219,0.18))" }}
+            />
           </motion.div>
 
         </motion.div>
