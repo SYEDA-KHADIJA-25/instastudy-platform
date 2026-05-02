@@ -334,29 +334,6 @@ export default function LandingPage() {
           style={{ background: `linear-gradient(to bottom, transparent, ${BRAND.darkBg})` }} />
       </section>
 
-      {/* ══════════════════════════════════════════
-          STATS BAR
-      ══════════════════════════════════════════ */}
-      <section style={{ background: BRAND.darkBg }}>
-        <div className="mx-auto max-w-5xl px-6 py-10 border-t" style={{ borderColor: "rgba(205,172,219,0.12)" }}>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { value: "500+", label: "Active tutors" },
-              { value: "10k+", label: "Sessions completed" },
-              { value: "4.8★", label: "Average rating" },
-              { value: "20+", label: "Subjects covered" },
-            ].map((s, i) => (
-              <motion.div key={s.label} className="text-center"
-                initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }} transition={{ delay: i * 0.08 }}>
-                <p className="text-3xl font-extrabold" style={{ color: BRAND.lavender }}>{s.value}</p>
-                <p className="mt-1 text-xs font-medium tracking-wide uppercase" style={{ color: "rgba(255,255,255,0.35)" }}>{s.label}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Marquee */}
       <Marquee />
 
