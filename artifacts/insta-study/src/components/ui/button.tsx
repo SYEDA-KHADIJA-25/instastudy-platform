@@ -5,33 +5,40 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0" +
-" hover-elevate active-elevate-2",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 select-none cursor-pointer",
   {
     variants: {
       variant: {
         default:
-           // @replit: no hover, and add primary border
-           "bg-primary text-primary-foreground border border-primary-border",
+          "rounded-lg bg-primary text-primary-foreground " +
+          "shadow-[0_2px_0_rgba(0,0,0,0.25),0_4px_16px_rgba(51,0,111,0.35)] " +
+          "hover:brightness-110 hover:shadow-[0_4px_4px_rgba(0,0,0,0.2),0_6px_20px_rgba(51,0,111,0.45)] hover:-translate-y-px " +
+          "active:translate-y-px active:shadow-[0_1px_2px_rgba(0,0,0,0.2),0_2px_8px_rgba(51,0,111,0.3)] active:brightness-95",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-sm border-destructive-border",
+          "rounded-lg bg-destructive text-destructive-foreground " +
+          "shadow-[0_2px_0_rgba(0,0,0,0.2),0_4px_14px_rgba(239,68,68,0.3)] " +
+          "hover:brightness-110 hover:-translate-y-px " +
+          "active:translate-y-px active:brightness-95",
         outline:
-          // @replit Shows the background color of whatever card / sidebar / accent background it is inside of.
-          // Inherits the current text color. Uses shadow-xs. no shadow on active
-          // No hover state
-          " border [border-color:var(--button-outline)] shadow-xs active:shadow-none ",
+          "rounded-lg border border-border bg-background text-foreground " +
+          "shadow-[0_1px_3px_rgba(0,0,0,0.08)] " +
+          "hover:bg-muted hover:-translate-y-px hover:shadow-[0_2px_6px_rgba(0,0,0,0.12)] " +
+          "active:translate-y-px active:shadow-none",
         secondary:
-          // @replit border, no hover, no shadow, secondary border.
-          "border bg-secondary text-secondary-foreground border border-secondary-border ",
-        // @replit no hover, transparent border
-        ghost: "border border-transparent",
-        link: "text-primary underline-offset-4 hover:underline",
+          "rounded-lg border bg-secondary text-secondary-foreground " +
+          "shadow-[0_1px_3px_rgba(0,0,0,0.08)] " +
+          "hover:brightness-95 hover:-translate-y-px " +
+          "active:translate-y-px active:brightness-90",
+        ghost:
+          "rounded-lg text-foreground " +
+          "hover:bg-muted " +
+          "active:bg-muted/80",
+        link: "text-primary underline-offset-4 hover:underline p-0",
       },
       size: {
-        // @replit changed sizes
-        default: "min-h-9 px-4 py-2",
-        sm: "min-h-8 rounded-md px-3 text-xs",
-        lg: "min-h-10 rounded-md px-8",
+        default: "h-9 px-4 py-2",
+        sm: "h-8 px-3 text-xs rounded-md",
+        lg: "h-11 px-8 text-sm",
         icon: "h-9 w-9",
       },
     },
