@@ -318,25 +318,6 @@ export default function LandingPage() {
             </Link>
           </motion.div>
 
-          {/* Social proof */}
-          <motion.div
-            className="mt-10 flex items-center justify-center gap-4"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.55 }}
-          >
-            <div className="flex -space-x-2.5">
-              {["S", "M", "A", "R", "K"].map((l, i) => (
-                <div key={l}
-                  className="flex h-8 w-8 items-center justify-center rounded-full border-2 text-[11px] font-bold text-white"
-                  style={{ background: `hsl(${265 + i * 18}, 70%, ${30 + i * 6}%)`, borderColor: BRAND.darkBg }}>
-                  {l}
-                </div>
-              ))}
-            </div>
-            <div className="text-xs" style={{ color: "rgba(255,255,255,0.38)" }}>
-              <span className="font-semibold text-white">500+</span> active tutors ·{" "}
-              <span className="font-semibold text-white">4.8★</span> avg rating
-            </div>
-          </motion.div>
         </motion.div>
 
         {/* Scroll indicator */}
