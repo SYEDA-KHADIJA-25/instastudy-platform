@@ -257,14 +257,15 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════════
           HERO
       ══════════════════════════════════════════ */}
-      <section
-        className="relative min-h-screen flex items-center overflow-hidden"
-        style={{
-          backgroundImage: "url('/hero-bg.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center top",
-        }}
-      >
+      <section className="relative min-h-screen flex items-center overflow-hidden">
+        {/* Full-bleed responsive background image */}
+        <img
+          src="/hero-bg.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none select-none"
+        />
+
         {/* ── Content — centered in the open white middle area ── */}
         <motion.div
           className="relative z-10 w-full max-w-6xl mx-auto px-8 md:px-14 flex flex-col items-center justify-center text-center"
