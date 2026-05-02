@@ -93,7 +93,7 @@
   --primary: 270 100% 22%;
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 337 100% 75%;
+  --secondary: 285 31% 77%;
   --secondary-foreground: 270 100% 15%;
 
   --muted: 286 30% 96%;
@@ -152,8 +152,8 @@
   --primary: 270 100% 55%;
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 337 100% 75%;
-  --secondary-foreground: 0 0% 100%;
+  --secondary: 285 31% 77%;
+  --secondary-foreground: 270 100% 15%;
 
   --muted: 270 20% 18%;
   --muted-foreground: 286 20% 65%;

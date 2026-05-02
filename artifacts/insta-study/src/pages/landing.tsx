@@ -217,7 +217,7 @@ export default function LandingPage() {
             </Button>
           </Link>
           <Link href="/register">
-            <Button size="sm" className="border-0 font-semibold bg-gradient-to-br from-primary to-secondary text-primary-foreground">
+            <Button size="sm" className="border-0 font-semibold bg-primary text-primary-foreground">
               Get started
             </Button>
           </Link>
@@ -301,7 +301,7 @@ export default function LandingPage() {
             >
               <Link href="/register">
                 <Button size="lg"
-                  className="gap-2 px-8 py-5 text-sm font-bold border-0 h-auto bg-gradient-to-br from-primary to-secondary text-primary-foreground"
+                  className="gap-2 px-8 py-5 text-sm font-bold border-0 h-auto bg-primary text-primary-foreground"
                   data-testid="button-cta-get-started">
                   Find a tutor <ChevronRight className="h-3.5 w-3.5" />
                 </Button>
@@ -420,7 +420,7 @@ export default function LandingPage() {
           <motion.div className="text-center mb-20"
             initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="text-4xl font-extrabold md:text-5xl" style={{ color: BRAND.deep }}>
-              From zero to learning <span style={{ color: BRAND.pink }}>in minutes</span>
+              From zero to learning <span style={{ color: BRAND.lavender }}>in minutes</span>
             </h2>
             <p className="mt-4 text-sm" style={{ color: "#666" }}>No friction. No wait. Just knowledge.</p>
           </motion.div>
@@ -432,8 +432,8 @@ export default function LandingPage() {
             <div className="grid gap-12 md:grid-cols-3">
               {[
                 { step: "01", title: "Create your account",  desc: "Register in seconds. One account for both students and tutors.", doodle: <PencilDoodle className="w-10 h-28" />, color: BRAND.deep },
-                { step: "02", title: "Find your tutor",      desc: "Browse by subject, filter by rate and rating. Read real profiles.", doodle: <BookDoodle className="w-28 h-20" />, color: BRAND.purple },
-                { step: "03", title: "Book & learn",         desc: "Pick a slot, confirm your booking, show up ready to learn.", doodle: <SparkDoodle className="w-12 h-12" />, color: BRAND.pink },
+                { step: "02", title: "Find your tutor",      desc: "Browse by subject, filter by rate and rating. Read real profiles.", doodle: <BookDoodle className="w-28 h-20" />, color: BRAND.deep },
+                { step: "03", title: "Book & learn",         desc: "Pick a slot, confirm your booking, show up ready to learn.", doodle: <SparkDoodle className="w-12 h-12" />, color: BRAND.deep },
               ].map((item, i) => (
                 <motion.div key={item.step} className="flex flex-col items-center text-center"
                   initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
@@ -455,8 +455,7 @@ export default function LandingPage() {
           <motion.div className="mt-16 text-center"
             initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
             <Link href="/register">
-              <Button size="lg" className="gap-2 px-10 py-6 text-base font-bold border-0"
-                style={{ background: BRAND.deep, color: BRAND.lavender, boxShadow: "0 6px 28px rgba(51,0,111,0.35)" }}>
+              <Button size="lg" className="gap-2 px-10 py-6 text-base font-bold border-0 bg-primary text-primary-foreground">
                 Start for free <ChevronRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -494,7 +493,7 @@ export default function LandingPage() {
                   transition={{ delay: i * 0.1 }}>
                   <Card className="group overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1"
                     style={{ border: `1px solid rgba(205,172,219,0.4)` }}>
-                    <div className="h-1.5 w-full" style={{ background: i % 2 === 0 ? BRAND.deep : BRAND.purple }} />
+                    <div className="h-1.5 w-full" style={{ background: BRAND.deep }} />
                     <CardContent className="p-5">
                       <div className="flex items-start gap-4">
                         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white font-bold shadow-sm"
@@ -510,7 +509,7 @@ export default function LandingPage() {
                             </span>
                           </div>
                         </div>
-                        <span className="shrink-0 text-sm font-bold" style={{ color: BRAND.pink }}>
+                        <span className="shrink-0 text-sm font-bold" style={{ color: BRAND.deep }}>
                           ${tutor.hourlyRate}/hr
                         </span>
                       </div>
@@ -586,13 +585,13 @@ export default function LandingPage() {
                   <p className="text-sm leading-relaxed flex-1 italic" style={{ color: "rgba(255,255,255,0.65)" }}>{t.text}</p>
                   <div className="mt-6 flex items-center gap-3">
                     <div className="flex h-9 w-9 items-center justify-center rounded-full font-bold text-sm"
-                      style={{ background: BRAND.pink, color: BRAND.deep }}>
+                      style={{ background: BRAND.lavender, color: BRAND.deep }}>
                       {t.avatar}
                     </div>
                     <div>
                       <p className="text-white font-semibold text-sm">{t.name}</p>
                       <p className="text-xs" style={{ color: BRAND.lavender, opacity: 0.7 }}>
-                        {t.subject} · <span style={{ color: BRAND.pink }}>{t.result}</span>
+                        {t.subject} · <span style={{ color: BRAND.lavender }}>{t.result}</span>
                       </p>
                     </div>
                     <div className="ml-auto flex gap-0.5">
@@ -639,7 +638,7 @@ export default function LandingPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link href="/register">
-                <Button size="lg" className="gap-2 px-10 py-6 text-base font-bold border-0 bg-gradient-to-br from-primary to-secondary text-primary-foreground"
+                <Button size="lg" className="gap-2 px-10 py-6 text-base font-bold border-0 bg-primary text-primary-foreground"
                   data-testid="button-final-cta">
                   Create free account
                 </Button>
