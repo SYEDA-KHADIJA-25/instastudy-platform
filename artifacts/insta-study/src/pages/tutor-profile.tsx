@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useGetTutor, useGetMyTutorProfile, useGetTutorAvailability, useUpdateMyTutorProfile, getGetMyTutorProfileQueryKey } from "@workspace/api-client-react";
+import { useGetTutor, useGetMyTutorProfile, useGetTutorAvailability, useUpdateMyTutorProfile, getGetMyTutorProfileQueryKey, getGetTutorQueryKey, getGetTutorAvailabilityQueryKey } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Star, Clock, DollarSign, BookOpen, Calendar, ChevronLeft, Edit3 } from "lucide-react";
+import { Star, Clock, DollarSign, BookOpen, Calendar, ChevronLeft, Edit3, X, Plus } from "lucide-react";
 import { Link } from "wouter";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
@@ -17,16 +17,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
-function PublicLayout({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth();
-  if (user) return <AppLayout>{children}</AppLayout>;
-  return (
-    <div className="min-h-screen bg-background">
-      <PublicNavbar />
-      <div className="pt-16 px-6 py-8 mx-auto max-w-4xl">{children}</div>
-    </div>
-  );
-}
+const COMMON_SUBJECTS = [
+  "Mathematics", "Physics", "Chemistry", "Biology", "English",
+  "History", "Computer Science", "Spanish", "French", "Economics",
+  "Statistics", "Calculus", "Linear Algebra", "Python", "Algorithms",
+];
 
 export default function TutorProfilePage() {
   const params = useParams<{ tutorId: string }>();
@@ -39,17 +34,19 @@ export default function TutorProfilePage() {
   const [editRate, setEditRate] = useState("");
   const [editBio, setEditBio] = useState("");
   const [editExperience, setEditExperience] = useState("");
+  const [editSubjects, setEditSubjects] = useState<string[]>([]);
+  const [subjectInput, setSubjectInput] = useState("");
 
   const { data: tutor, isLoading } = useGetTutor(tutorId, {
-    query: { enabled: !!tutorId },
+    query: { enabled: !!tutorId, queryKey: getGetTutorQueryKey(tutorId) },
   });
 
   const { data: myTutorProfile } = useGetMyTutorProfile({
-    query: { enabled: !!user, retry: 0 },
+    query: { enabled: !!user, retry: 0, queryKey: getGetMyTutorProfileQueryKey() },
   });
 
   const { data: availability } = useGetTutorAvailability(tutorId, {
-    query: { enabled: !!tutorId },
+    query: { enabled: !!tutorId, queryKey: getGetTutorAvailabilityQueryKey(tutorId) },
   });
 
   const updateMutation = useUpdateMyTutorProfile({
@@ -58,6 +55,9 @@ export default function TutorProfilePage() {
         queryClient.invalidateQueries({ queryKey: getGetMyTutorProfileQueryKey() });
         toast({ title: "Profile updated" });
         setEditing(false);
+      },
+      onError: () => {
+        toast({ title: "Failed to update profile", variant: "destructive" });
       },
     },
   });
@@ -69,15 +69,33 @@ export default function TutorProfilePage() {
     setEditRate(tutor?.hourlyRate?.toString() || "");
     setEditBio(tutor?.bio || "");
     setEditExperience(tutor?.experience || "");
+    setEditSubjects([...(tutor?.subjects || [])]);
     setEditing(true);
   };
 
+  const addSubject = (sub: string) => {
+    const trimmed = sub.trim();
+    if (trimmed && !editSubjects.includes(trimmed)) {
+      setEditSubjects([...editSubjects, trimmed]);
+    }
+    setSubjectInput("");
+  };
+
+  const removeSubject = (sub: string) => {
+    setEditSubjects(editSubjects.filter((s) => s !== sub));
+  };
+
   const saveEdit = () => {
+    if (editSubjects.length === 0) {
+      toast({ title: "Add at least one subject", variant: "destructive" });
+      return;
+    }
     updateMutation.mutate({
       data: {
         hourlyRate: editRate ? parseFloat(editRate) : undefined,
         bio: editBio || undefined,
         experience: editExperience || undefined,
+        subjects: editSubjects,
       },
     });
   };
@@ -118,7 +136,7 @@ export default function TutorProfilePage() {
                     {tutor.name.charAt(0)}
                   </div>
                   <div className="flex gap-2 pb-1">
-                    {isOwner && (
+                    {isOwner && !editing && (
                       <Button
                         variant="outline"
                         size="sm"
@@ -148,16 +166,19 @@ export default function TutorProfilePage() {
 
                 {editing ? (
                   <div className="space-y-4">
+                    {/* Edit rate */}
                     <div>
                       <label className="text-sm font-medium text-foreground">Hourly rate ($)</label>
                       <Input
                         type="number"
                         value={editRate}
                         onChange={(e) => setEditRate(e.target.value)}
-                        className="mt-1"
+                        className="mt-1 max-w-xs"
                         data-testid="input-edit-rate"
                       />
                     </div>
+
+                    {/* Edit bio */}
                     <div>
                       <label className="text-sm font-medium text-foreground">Bio</label>
                       <Textarea
@@ -168,6 +189,8 @@ export default function TutorProfilePage() {
                         data-testid="input-edit-bio"
                       />
                     </div>
+
+                    {/* Edit experience */}
                     <div>
                       <label className="text-sm font-medium text-foreground">Experience</label>
                       <Input
@@ -177,9 +200,54 @@ export default function TutorProfilePage() {
                         data-testid="input-edit-experience"
                       />
                     </div>
+
+                    {/* Edit subjects */}
+                    <div>
+                      <label className="text-sm font-medium text-foreground">Subjects</label>
+                      <div className="mt-2 flex flex-wrap gap-1.5 mb-2">
+                        {editSubjects.map((s) => (
+                          <Badge key={s} variant="secondary" className="gap-1 pr-1 rounded-full">
+                            {s}
+                            <button
+                              type="button"
+                              onClick={() => removeSubject(s)}
+                              className="ml-0.5 hover:text-red-600 transition-colors"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="Add a subject..."
+                          value={subjectInput}
+                          onChange={(e) => setSubjectInput(e.target.value)}
+                          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addSubject(subjectInput); } }}
+                          className="max-w-xs"
+                          data-testid="input-add-subject"
+                        />
+                        <Button type="button" variant="outline" size="sm" onClick={() => addSubject(subjectInput)}>
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {COMMON_SUBJECTS.filter((s) => !editSubjects.includes(s)).slice(0, 6).map((s) => (
+                          <button
+                            key={s}
+                            type="button"
+                            className="text-xs px-2.5 py-1 rounded-full border border-border hover:bg-muted transition-colors"
+                            onClick={() => addSubject(s)}
+                          >
+                            + {s}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
                     <div className="flex gap-2">
                       <Button size="sm" onClick={saveEdit} disabled={updateMutation.isPending} data-testid="button-save-profile">
-                        Save changes
+                        {updateMutation.isPending ? "Saving..." : "Save changes"}
                       </Button>
                       <Button size="sm" variant="outline" onClick={() => setEditing(false)}>
                         Cancel
@@ -235,32 +303,50 @@ export default function TutorProfilePage() {
                 </CardHeader>
                 <CardContent>
                   {availableSlots.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No available slots at the moment.</p>
-                  ) : (
-                    <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                      {availableSlots.slice(0, 6).map((slot) => (
-                        <div
-                          key={slot.id}
-                          className="flex items-center gap-2 rounded-lg border border-border p-3 text-sm"
-                          data-testid={`slot-${slot.id}`}
-                        >
-                          <Clock className="h-3.5 w-3.5 shrink-0 text-primary" />
-                          <div>
-                            <p className="font-medium text-foreground">{format(new Date(slot.startTime), "MMM d")}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {format(new Date(slot.startTime), "h:mm a")} – {format(new Date(slot.endTime), "h:mm a")}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
+                    <div className="py-4 text-center">
+                      <Clock className="h-8 w-8 text-muted-foreground/50 mx-auto mb-2" />
+                      <p className="text-sm text-muted-foreground">No available slots at the moment.</p>
+                      <p className="text-xs text-muted-foreground mt-1">Check back later for new openings.</p>
                     </div>
-                  )}
-                  {user && availableSlots.length > 0 && (
-                    <Link href={`/book/${tutor.id}`}>
-                      <Button className="mt-4 gap-1.5 shadow-sm shadow-primary/20" data-testid="button-book-now">
-                        <Calendar className="h-4 w-4" /> Book a session
-                      </Button>
-                    </Link>
+                  ) : (
+                    <>
+                      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                        {availableSlots.slice(0, 6).map((slot) => (
+                          <div
+                            key={slot.id}
+                            className="flex items-center gap-2 rounded-lg border border-border p-3 text-sm"
+                            data-testid={`slot-${slot.id}`}
+                          >
+                            <Clock className="h-3.5 w-3.5 shrink-0 text-primary" />
+                            <div>
+                              <p className="font-medium text-foreground">{format(new Date(slot.startTime), "EEE, MMM d")}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {format(new Date(slot.startTime), "h:mm a")} – {format(new Date(slot.endTime), "h:mm a")}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      {availableSlots.length > 6 && (
+                        <p className="mt-3 text-xs text-muted-foreground text-center">
+                          +{availableSlots.length - 6} more slots available when you book
+                        </p>
+                      )}
+                      {user && (
+                        <Link href={`/book/${tutor.id}`}>
+                          <Button className="mt-4 gap-1.5 shadow-sm shadow-primary/20" data-testid="button-book-now">
+                            <Calendar className="h-4 w-4" /> Book a session
+                          </Button>
+                        </Link>
+                      )}
+                      {!user && (
+                        <Link href="/register">
+                          <Button className="mt-4 gap-1.5" variant="outline">
+                            Sign up to book
+                          </Button>
+                        </Link>
+                      )}
+                    </>
                   )}
                 </CardContent>
               </Card>

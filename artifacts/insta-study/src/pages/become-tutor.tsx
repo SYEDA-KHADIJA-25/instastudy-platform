@@ -36,7 +36,7 @@ export default function BecomeTutorPage() {
   const [subjectInput, setSubjectInput] = useState("");
 
   const { data: myProfile, isLoading: profileLoading } = useGetMyTutorProfile({
-    query: { retry: false },
+    query: { retry: false, queryKey: getGetMyTutorProfileQueryKey() },
   });
 
   const form = useForm<FormData>({

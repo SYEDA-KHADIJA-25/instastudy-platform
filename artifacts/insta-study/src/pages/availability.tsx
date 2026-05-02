@@ -9,6 +9,7 @@ import {
   useCreateAvailabilitySlot,
   useDeleteAvailabilitySlot,
   getGetTutorAvailabilityQueryKey,
+  getGetMyTutorProfileQueryKey,
 } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
@@ -26,12 +27,12 @@ export default function AvailabilityPage() {
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
   const { data: myProfile, isLoading: profileLoading } = useGetMyTutorProfile({
-    query: { retry: false },
+    query: { retry: false, queryKey: getGetMyTutorProfileQueryKey() },
   });
 
   const { data: slots, isLoading: slotsLoading } = useGetTutorAvailability(
     myProfile?.id ?? 0,
-    { query: { enabled: !!myProfile?.id } }
+    { query: { enabled: !!myProfile?.id, queryKey: getGetTutorAvailabilityQueryKey(myProfile?.id ?? 0) } }
   );
 
   const createMutation = useCreateAvailabilitySlot({

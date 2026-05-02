@@ -17,20 +17,24 @@ import {
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/tutors", label: "Find Tutors", icon: Search },
-  { href: "/bookings", label: "My Bookings", icon: BookOpen },
-  { href: "/become-tutor", label: "Become a Tutor", icon: GraduationCap },
-  { href: "/availability", label: "Availability", icon: Calendar, tutorOnly: true },
-  { href: "/profile", label: "Profile", icon: User },
-];
-
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, refreshUser } = useAuth();
   const [location] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const queryClient = useQueryClient();
+
+  const isTutor = user?.isTutor && user?.tutorStatus === "approved";
+  const isPending = user?.tutorStatus === "pending";
+
+  const navItems = [
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/tutors", label: "Find Tutors", icon: Search },
+    { href: "/bookings", label: "My Bookings", icon: BookOpen },
+    ...(!isTutor && !isPending ? [{ href: "/become-tutor", label: "Become a Tutor", icon: GraduationCap }] : []),
+    ...(isTutor ? [{ href: "/availability", label: "Availability", icon: Calendar }] : []),
+    { href: "/profile", label: "Profile", icon: User },
+  ];
+
   const logoutMutation = useLogout({
     mutation: {
       onSuccess: () => {
@@ -40,10 +44,6 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       },
     },
   });
-
-  const visibleNav = navItems.filter(
-    (item) => !item.tutorOnly || (user?.isTutor && user?.tutorStatus === "approved")
-  );
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -63,7 +63,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
         <nav className="flex-1 overflow-y-auto px-3 py-4">
           <ul className="space-y-1">
-            {visibleNav.map((item) => {
+            {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = location === item.href;
               return (
@@ -86,6 +86,22 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               );
             })}
           </ul>
+
+          {/* Tutor status badge */}
+          {isPending && (
+            <div className="mt-4 mx-1 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5">
+              <p className="text-xs font-medium text-amber-700">Tutor application pending</p>
+              <p className="text-xs text-amber-600 mt-0.5">Under review by our team</p>
+            </div>
+          )}
+          {isTutor && (
+            <div className="mt-4 mx-1 rounded-lg border border-green-200 bg-green-50 px-3 py-2.5">
+              <p className="text-xs font-medium text-green-700">Approved Tutor</p>
+              <Link href="/availability" onClick={() => setMobileOpen(false)}>
+                <p className="text-xs text-green-600 mt-0.5 hover:underline cursor-pointer">Manage availability →</p>
+              </Link>
+            </div>
+          )}
         </nav>
 
         <div className="border-t border-sidebar-border p-3">
@@ -104,7 +120,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             variant="ghost"
             size="sm"
             className="w-full justify-start gap-2 text-muted-foreground hover:text-foreground"
-            onClick={() => logoutMutation.mutate({})}
+            onClick={() => logoutMutation.mutate(undefined as any)}
             data-testid="button-logout"
           >
             <LogOut className="h-4 w-4" />

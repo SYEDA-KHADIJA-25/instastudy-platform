@@ -12,6 +12,8 @@ import {
   useCreateBooking,
   getListMyBookingsQueryKey,
   getGetDashboardQueryKey,
+  getGetTutorQueryKey,
+  getGetTutorAvailabilityQueryKey,
 } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
@@ -33,11 +35,11 @@ export default function BookPage() {
   const [notes, setNotes] = useState("");
 
   const { data: tutor, isLoading: tutorLoading } = useGetTutor(tutorId, {
-    query: { enabled: !!tutorId },
+    query: { enabled: !!tutorId, queryKey: getGetTutorQueryKey(tutorId) },
   });
 
   const { data: availability, isLoading: slotsLoading } = useGetTutorAvailability(tutorId, {
-    query: { enabled: !!tutorId },
+    query: { enabled: !!tutorId, queryKey: getGetTutorAvailabilityQueryKey(tutorId) },
   });
 
   const availableSlots = availability?.filter((s) => !s.isBooked) || [];

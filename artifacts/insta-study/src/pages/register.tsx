@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,8 +22,14 @@ type FormData = z.infer<typeof schema>;
 
 export default function RegisterPage() {
   const [, setLocation] = useLocation();
-  const { refreshUser } = useAuth();
+  const { user, isLoading, refreshUser } = useAuth();
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (!isLoading && user) {
+      setLocation("/dashboard");
+    }
+  }, [user, isLoading]);
 
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -50,6 +57,8 @@ export default function RegisterPage() {
     registerMutation.mutate({ data });
   };
 
+  if (isLoading) return null;
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_40%_at_50%_10%,hsl(275_85%_55%/0.08),transparent)]" />
@@ -62,7 +71,7 @@ export default function RegisterPage() {
       >
         <div className="mb-8 flex flex-col items-center text-center">
           <Link href="/">
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/25">
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/25 cursor-pointer">
               <GraduationCap className="h-6 w-6 text-primary-foreground" />
             </div>
           </Link>

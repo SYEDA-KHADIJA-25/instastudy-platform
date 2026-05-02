@@ -17,12 +17,54 @@ const stagger = {
   animate: { transition: { staggerChildren: 0.1 } },
 };
 
+function scrollToSection(id: string) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
 export default function LandingPage() {
   const { data: featuredTutors } = useGetFeaturedTutors();
 
   return (
     <div className="min-h-screen bg-background">
-      <PublicNavbar />
+      {/* Custom navbar with smooth scroll */}
+      <nav className="fixed top-0 left-0 right-0 z-50 flex h-16 items-center justify-between border-b border-border/50 bg-background/80 px-6 backdrop-blur-md">
+        <Link href="/" className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+            <BookOpen className="h-4 w-4 text-primary-foreground" />
+          </div>
+          <span className="text-lg font-semibold text-foreground">Insta-Study</span>
+        </Link>
+
+        <div className="hidden items-center gap-8 md:flex">
+          <button
+            onClick={() => scrollToSection("features")}
+            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Features
+          </button>
+          <button
+            onClick={() => scrollToSection("how-it-works")}
+            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            How it Works
+          </button>
+          <Link href="/tutors" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            Browse Tutors
+          </Link>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <Link href="/login">
+            <Button variant="ghost" size="sm" data-testid="button-nav-login">Sign in</Button>
+          </Link>
+          <Link href="/register">
+            <Button size="sm" data-testid="button-nav-register">Get started</Button>
+          </Link>
+        </div>
+      </nav>
 
       {/* Hero */}
       <section className="relative overflow-hidden pt-24 pb-20 md:pt-32 md:pb-28">
@@ -73,7 +115,7 @@ export default function LandingPage() {
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </Link>
-            <Link href="/become-tutor">
+            <Link href="/register">
               <Button size="lg" variant="outline" className="gap-2 px-8" data-testid="button-cta-become-tutor">
                 Become a tutor
               </Button>
@@ -96,8 +138,27 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Stats bar */}
+      <section className="border-y border-border bg-muted/20 py-8">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+            {[
+              { value: "500+", label: "Active tutors" },
+              { value: "10k+", label: "Sessions completed" },
+              { value: "4.8★", label: "Average rating" },
+              { value: "20+", label: "Subjects covered" },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Features */}
-      <section id="features" className="py-20 bg-muted/30">
+      <section id="features" className="py-20">
         <div className="mx-auto max-w-6xl px-6">
           <motion.div
             className="text-center mb-12"
@@ -124,23 +185,44 @@ export default function LandingPage() {
               {
                 icon: Users,
                 title: "Expert Peer Tutors",
-                desc: "Connect with verified tutors across mathematics, sciences, languages, and more.",
+                desc: "Connect with verified tutors across mathematics, sciences, languages, and more. Every tutor is reviewed before going live.",
                 color: "text-primary",
                 bg: "bg-primary/10",
               },
               {
                 icon: Clock,
                 title: "Flexible Scheduling",
-                desc: "Book sessions around your schedule. Tutors set their availability, you pick what works.",
+                desc: "Book sessions around your schedule. Tutors set their own availability, you pick what works for you.",
                 color: "text-secondary",
                 bg: "bg-secondary/10",
               },
               {
                 icon: Zap,
                 title: "Instant Booking",
-                desc: "Browse profiles, check availability, and book your session in under two minutes.",
+                desc: "Browse profiles, check availability, and book your session in under two minutes — no back-and-forth.",
                 color: "text-primary",
                 bg: "bg-primary/10",
+              },
+              {
+                icon: Star,
+                title: "Ratings & Reviews",
+                desc: "Transparent ratings help you pick the right tutor. Every completed session can be reviewed.",
+                color: "text-secondary",
+                bg: "bg-secondary/10",
+              },
+              {
+                icon: Shield,
+                title: "Safe & Verified",
+                desc: "All tutors go through a review process before being approved. Your learning experience is protected.",
+                color: "text-primary",
+                bg: "bg-primary/10",
+              },
+              {
+                icon: BookOpen,
+                title: "Earn as a Tutor",
+                desc: "Set your own rate and schedule. Apply in minutes and start earning by sharing what you know.",
+                color: "text-secondary",
+                bg: "bg-secondary/10",
               },
             ].map((feature) => (
               <motion.div key={feature.title} variants={fadeUp}>
@@ -160,7 +242,7 @@ export default function LandingPage() {
       </section>
 
       {/* How it works */}
-      <section id="how-it-works" className="py-20">
+      <section id="how-it-works" className="py-20 bg-muted/30">
         <div className="mx-auto max-w-6xl px-6">
           <motion.div
             className="text-center mb-12"
@@ -174,9 +256,9 @@ export default function LandingPage() {
 
           <div className="grid gap-8 md:grid-cols-3">
             {[
-              { step: "01", title: "Create your account", desc: "Register in seconds — no role selection needed. One account for everything." },
-              { step: "02", title: "Find your tutor", desc: "Search by subject, filter by rate and rating. Every tutor is verified." },
-              { step: "03", title: "Book and learn", desc: "Pick a time slot, confirm your session, and start learning right away." },
+              { step: "01", title: "Create your account", desc: "Register in seconds — no role selection needed. One account for everything, whether you're a student, tutor, or both." },
+              { step: "02", title: "Find your tutor", desc: "Search by subject, filter by rate and rating. Browse profiles, read bios, and check availability before booking." },
+              { step: "03", title: "Book and learn", desc: "Pick a time slot that works for you, confirm your booking, and start learning right away." },
             ].map((item, i) => (
               <motion.div
                 key={item.step}
@@ -192,12 +274,25 @@ export default function LandingPage() {
               </motion.div>
             ))}
           </div>
+
+          <motion.div
+            className="mt-12 text-center"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            <Link href="/register">
+              <Button size="lg" className="gap-2 shadow-lg shadow-primary/20">
+                Get started for free <ChevronRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
       {/* Featured Tutors */}
       {featuredTutors && featuredTutors.length > 0 && (
-        <section className="py-20 bg-muted/30">
+        <section className="py-20">
           <div className="mx-auto max-w-6xl px-6">
             <div className="mb-10 flex items-center justify-between">
               <div>
@@ -239,6 +334,10 @@ export default function LandingPage() {
                         </span>
                       </div>
 
+                      {tutor.bio && (
+                        <p className="mt-3 text-xs text-muted-foreground line-clamp-2 leading-relaxed">{tutor.bio}</p>
+                      )}
+
                       <div className="mt-3 flex flex-wrap gap-1.5">
                         {tutor.subjects.slice(0, 3).map((s) => (
                           <Badge key={s} variant="secondary" className="text-xs px-2 py-0.5 rounded-full">
@@ -260,6 +359,55 @@ export default function LandingPage() {
           </div>
         </section>
       )}
+
+      {/* Testimonials */}
+      <section className="py-20 bg-muted/30">
+        <div className="mx-auto max-w-6xl px-6">
+          <motion.div
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl font-bold text-foreground">What students say</h2>
+          </motion.div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {[
+              { name: "Priya S.", subject: "Calculus", text: "My tutor explained integration in a way that finally clicked. Went from a C to an A in one month.", rating: 5 },
+              { name: "Marcus L.", subject: "Python", text: "Found an amazing CS tutor who helped me land my first internship. Couldn't have done it without Insta-Study.", rating: 5 },
+              { name: "Emma T.", subject: "Chemistry", text: "Flexible scheduling was a lifesaver. I could book sessions around my busy schedule.", rating: 5 },
+            ].map((t, i) => (
+              <motion.div
+                key={t.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <Card className="h-full border-card-border">
+                  <CardContent className="p-6">
+                    <div className="flex mb-3">
+                      {[...Array(t.rating)].map((_, j) => (
+                        <Star key={j} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                      ))}
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed italic">"{t.text}"</p>
+                    <div className="mt-4 flex items-center gap-2">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                        {t.name.charAt(0)}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-foreground">{t.name}</p>
+                        <p className="text-xs text-muted-foreground">{t.subject} student</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* CTA */}
       <section className="py-20">
@@ -309,6 +457,7 @@ export default function LandingPage() {
               <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
               <Link href="/tutors" className="hover:text-foreground transition-colors">Tutors</Link>
               <Link href="/login" className="hover:text-foreground transition-colors">Sign in</Link>
+              <Link href="/register" className="hover:text-foreground transition-colors">Register</Link>
             </div>
           </div>
         </div>

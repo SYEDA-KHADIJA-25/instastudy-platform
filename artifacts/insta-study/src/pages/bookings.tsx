@@ -14,7 +14,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/components/auth-provider";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
-import { Calendar, Clock, CheckCircle, XCircle, BookOpen, ChevronRight } from "lucide-react";
+import { Calendar, Clock, CheckCircle, XCircle, BookOpen, ChevronRight, Flag } from "lucide-react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 
@@ -33,12 +33,12 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-function BookingCard({ booking, asTutor, onAction }: {
+function BookingCard({ booking, asTutor, onAction, isUpdating }: {
   booking: any;
   asTutor?: boolean;
   onAction?: (id: number, status: string) => void;
+  isUpdating?: boolean;
 }) {
-  const other = asTutor ? booking.student : booking.tutor;
   const otherName = asTutor ? booking.student?.name : booking.tutor?.name;
   return (
     <Card className="border-card-border" data-testid={`booking-card-${booking.id}`}>
@@ -69,26 +69,45 @@ function BookingCard({ booking, asTutor, onAction }: {
           </div>
         </div>
 
-        {asTutor && booking.status === "pending" && onAction && (
-          <div className="mt-3 flex gap-2 pt-3 border-t border-border">
-            <Button
-              size="sm"
-              className="flex-1 gap-1.5"
-              onClick={() => onAction(booking.id, "confirmed")}
-              data-testid={`button-accept-booking-${booking.id}`}
-            >
-              <CheckCircle className="h-3.5 w-3.5" /> Accept
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              className="flex-1 gap-1.5 text-red-600 hover:text-red-600 hover:bg-red-50 hover:border-red-200"
-              onClick={() => onAction(booking.id, "rejected")}
-              data-testid={`button-reject-booking-${booking.id}`}
-            >
-              <XCircle className="h-3.5 w-3.5" /> Decline
-            </Button>
-          </div>
+        {asTutor && onAction && (
+          <>
+            {booking.status === "pending" && (
+              <div className="mt-3 flex gap-2 pt-3 border-t border-border">
+                <Button
+                  size="sm"
+                  className="flex-1 gap-1.5"
+                  onClick={() => onAction(booking.id, "confirmed")}
+                  disabled={isUpdating}
+                  data-testid={`button-accept-booking-${booking.id}`}
+                >
+                  <CheckCircle className="h-3.5 w-3.5" /> Accept
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="flex-1 gap-1.5 text-red-600 hover:text-red-600 hover:bg-red-50 hover:border-red-200"
+                  onClick={() => onAction(booking.id, "rejected")}
+                  disabled={isUpdating}
+                  data-testid={`button-reject-booking-${booking.id}`}
+                >
+                  <XCircle className="h-3.5 w-3.5" /> Decline
+                </Button>
+              </div>
+            )}
+            {booking.status === "confirmed" && (
+              <div className="mt-3 pt-3 border-t border-border">
+                <Button
+                  size="sm"
+                  className="gap-1.5 bg-green-600 hover:bg-green-700"
+                  onClick={() => onAction(booking.id, "completed")}
+                  disabled={isUpdating}
+                  data-testid={`button-complete-booking-${booking.id}`}
+                >
+                  <Flag className="h-3.5 w-3.5" /> Mark as completed
+                </Button>
+              </div>
+            )}
+          </>
         )}
 
         {!asTutor && booking.status === "pending" && onAction && (
@@ -98,6 +117,7 @@ function BookingCard({ booking, asTutor, onAction }: {
               variant="outline"
               className="text-red-600 hover:text-red-600 hover:bg-red-50 hover:border-red-200"
               onClick={() => onAction(booking.id, "cancelled")}
+              disabled={isUpdating}
               data-testid={`button-cancel-booking-${booking.id}`}
             >
               Cancel request
@@ -114,6 +134,7 @@ export default function BookingsPage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const isTutor = user?.isTutor && user?.tutorStatus === "approved";
+  const [updatingId, setUpdatingId] = useState<number | null>(null);
 
   const { data: studentBookings, isLoading: loadingStudent } = useListMyBookings(
     { role: "student" },
@@ -127,24 +148,44 @@ export default function BookingsPage() {
 
   const updateMutation = useUpdateBooking({
     mutation: {
-      onSuccess: (_, vars) => {
+      onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: getListMyBookingsQueryKey() });
         queryClient.invalidateQueries({ queryKey: getGetDashboardQueryKey() });
+        setUpdatingId(null);
         toast({ title: "Booking updated" });
       },
       onError: () => {
+        setUpdatingId(null);
         toast({ title: "Failed to update booking", variant: "destructive" });
       },
     },
   });
 
   const handleAction = (bookingId: number, status: string) => {
+    setUpdatingId(bookingId);
     updateMutation.mutate({ bookingId, data: { status: status as any } });
   };
+
+  const pendingStudent = studentBookings?.filter((b) => b.status === "pending") || [];
+  const activeStudent = studentBookings?.filter((b) => b.status === "confirmed") || [];
+  const pastStudent = studentBookings?.filter((b) => ["completed", "cancelled", "rejected"].includes(b.status)) || [];
 
   const pendingTutor = tutorBookings?.filter((b) => b.status === "pending") || [];
   const activeTutor = tutorBookings?.filter((b) => b.status === "confirmed") || [];
   const pastTutor = tutorBookings?.filter((b) => ["completed", "rejected", "cancelled"].includes(b.status)) || [];
+
+  const renderEmpty = (label: string) => (
+    <div className="flex flex-col items-center py-16 text-center">
+      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+        <BookOpen className="h-7 w-7 text-muted-foreground" />
+      </div>
+      <h3 className="text-base font-medium text-foreground">{label}</h3>
+      <p className="mt-1 text-sm text-muted-foreground">Your booking history will appear here</p>
+      <Link href="/tutors">
+        <Button className="mt-4 gap-1.5" size="sm">Find a tutor <ChevronRight className="h-3.5 w-3.5" /></Button>
+      </Link>
+    </div>
+  );
 
   return (
     <AppLayout>
@@ -156,10 +197,27 @@ export default function BookingsPage() {
 
         <Tabs defaultValue="student">
           <TabsList className="mb-6">
-            <TabsTrigger value="student" data-testid="tab-student-bookings">As student</TabsTrigger>
-            {isTutor && <TabsTrigger value="tutor" data-testid="tab-tutor-bookings">As tutor</TabsTrigger>}
+            <TabsTrigger value="student" data-testid="tab-student-bookings">
+              As student
+              {studentBookings && studentBookings.length > 0 && (
+                <span className="ml-1.5 rounded-full bg-primary/10 px-1.5 py-0.5 text-xs text-primary font-medium">
+                  {studentBookings.length}
+                </span>
+              )}
+            </TabsTrigger>
+            {isTutor && (
+              <TabsTrigger value="tutor" data-testid="tab-tutor-bookings">
+                As tutor
+                {pendingTutor.length > 0 && (
+                  <span className="ml-1.5 rounded-full bg-amber-100 px-1.5 py-0.5 text-xs text-amber-700 font-medium">
+                    {pendingTutor.length}
+                  </span>
+                )}
+              </TabsTrigger>
+            )}
           </TabsList>
 
+          {/* Student tab */}
           <TabsContent value="student">
             {loadingStudent ? (
               <div className="space-y-3">
@@ -167,34 +225,56 @@ export default function BookingsPage() {
               </div>
             ) : studentBookings && studentBookings.length > 0 ? (
               <motion.div
-                className="space-y-3"
+                className="space-y-6"
                 initial="hidden"
                 animate="show"
                 variants={{ show: { transition: { staggerChildren: 0.06 } } }}
               >
-                {studentBookings.map((booking) => (
-                  <motion.div
-                    key={booking.id}
-                    variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}
-                  >
-                    <BookingCard booking={booking} onAction={handleAction} />
-                  </motion.div>
-                ))}
+                {pendingStudent.length > 0 && (
+                  <div>
+                    <h3 className="mb-3 text-sm font-semibold text-foreground">Pending requests ({pendingStudent.length})</h3>
+                    <div className="space-y-3">
+                      {pendingStudent.map((b) => (
+                        <motion.div key={b.id} variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}>
+                          <BookingCard booking={b} onAction={handleAction} isUpdating={updatingId === b.id} />
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {activeStudent.length > 0 && (
+                  <div>
+                    <h3 className="mb-3 text-sm font-semibold text-foreground">Confirmed sessions</h3>
+                    <div className="space-y-3">
+                      {activeStudent.map((b) => (
+                        <motion.div key={b.id} variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}>
+                          <BookingCard booking={b} />
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {pastStudent.length > 0 && (
+                  <div>
+                    <h3 className="mb-3 text-sm font-semibold text-foreground">Past sessions</h3>
+                    <div className="space-y-3">
+                      {pastStudent.map((b) => (
+                        <motion.div key={b.id} variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}>
+                          <BookingCard booking={b} />
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </motion.div>
             ) : (
-              <div className="flex flex-col items-center py-16 text-center">
-                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
-                  <BookOpen className="h-7 w-7 text-muted-foreground" />
-                </div>
-                <h3 className="text-base font-medium text-foreground">No bookings yet</h3>
-                <p className="mt-1 text-sm text-muted-foreground">Book your first session with a tutor</p>
-                <Link href="/tutors">
-                  <Button className="mt-4 gap-1.5" size="sm">Find a tutor <ChevronRight className="h-3.5 w-3.5" /></Button>
-                </Link>
-              </div>
+              renderEmpty("No bookings yet")
             )}
           </TabsContent>
 
+          {/* Tutor tab */}
           {isTutor && (
             <TabsContent value="tutor">
               {loadingTutor ? (
@@ -208,7 +288,7 @@ export default function BookingsPage() {
                       <h3 className="mb-3 text-sm font-semibold text-foreground">Pending requests ({pendingTutor.length})</h3>
                       <div className="space-y-3">
                         {pendingTutor.map((b) => (
-                          <BookingCard key={b.id} booking={b} asTutor onAction={handleAction} />
+                          <BookingCard key={b.id} booking={b} asTutor onAction={handleAction} isUpdating={updatingId === b.id} />
                         ))}
                       </div>
                     </div>
@@ -219,7 +299,7 @@ export default function BookingsPage() {
                       <h3 className="mb-3 text-sm font-semibold text-foreground">Confirmed sessions</h3>
                       <div className="space-y-3">
                         {activeTutor.map((b) => (
-                          <BookingCard key={b.id} booking={b} asTutor />
+                          <BookingCard key={b.id} booking={b} asTutor onAction={handleAction} isUpdating={updatingId === b.id} />
                         ))}
                       </div>
                     </div>
@@ -242,6 +322,7 @@ export default function BookingsPage() {
                         <BookOpen className="h-7 w-7 text-muted-foreground" />
                       </div>
                       <p className="text-sm text-muted-foreground">No session requests yet</p>
+                      <p className="text-xs text-muted-foreground mt-1">Students will appear here once they book with you</p>
                     </div>
                   )}
                 </div>

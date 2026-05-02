@@ -3,10 +3,9 @@ import { useAuth } from "@/components/auth-provider";
 import { AppLayout } from "@/components/layout/app-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useGetDashboard, useGetFeaturedTutors } from "@workspace/api-client-react";
-import { Search, GraduationCap, BookOpen, Star, Clock, AlertCircle, CheckCircle, ChevronRight } from "lucide-react";
+import { useGetDashboard } from "@workspace/api-client-react";
+import { Search, GraduationCap, BookOpen, Star, Clock, CheckCircle, ChevronRight, DollarSign, Calendar } from "lucide-react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 
@@ -30,7 +29,11 @@ export default function DashboardPage() {
   const { data: dashboard, isLoading } = useGetDashboard();
 
   const isTutor = user?.isTutor && user?.tutorStatus === "approved";
-  const hasPendingApplication = user?.tutorStatus === "pending";
+  const isPending = user?.tutorStatus === "pending";
+  const hasPendingRequests = (dashboard?.pendingRequests?.length ?? 0) > 0;
+
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
 
   return (
     <AppLayout>
@@ -43,16 +46,20 @@ export default function DashboardPage() {
           transition={{ duration: 0.4 }}
         >
           <h1 className="text-2xl font-bold text-foreground">
-            Good {new Date().getHours() < 12 ? "morning" : new Date().getHours() < 18 ? "afternoon" : "evening"},{" "}
+            {greeting},{" "}
             <span className="text-primary">{user?.name?.split(" ")[0]}</span>
           </h1>
           <p className="mt-1 text-muted-foreground text-sm">
-            {isTutor ? "You can book sessions and manage your tutoring." : "Ready to learn something new today?"}
+            {isTutor
+              ? "You're an approved tutor. Manage your sessions and availability below."
+              : isPending
+              ? "Your tutor application is under review."
+              : "Ready to learn something new today?"}
           </p>
         </motion.div>
 
-        {/* Tutor application banner */}
-        {hasPendingApplication && (
+        {/* Tutor application pending banner */}
+        {isPending && (
           <motion.div
             className="mb-6 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4"
             initial={{ opacity: 0, y: 12 }}
@@ -61,36 +68,68 @@ export default function DashboardPage() {
             <Clock className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
             <div>
               <p className="text-sm font-medium text-amber-800">Tutor application pending review</p>
-              <p className="text-sm text-amber-700">We'll notify you once your application is approved.</p>
+              <p className="text-sm text-amber-700">We'll notify you once your application has been approved.</p>
             </div>
+          </motion.div>
+        )}
+
+        {/* Pending tutor requests banner */}
+        {isTutor && hasPendingRequests && (
+          <motion.div
+            className="mb-6 flex items-center justify-between gap-3 rounded-xl border border-blue-200 bg-blue-50 p-4"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <div className="flex items-start gap-3">
+              <Calendar className="mt-0.5 h-5 w-5 shrink-0 text-blue-600" />
+              <div>
+                <p className="text-sm font-medium text-blue-800">
+                  {dashboard?.pendingRequests?.length} new session request{dashboard?.pendingRequests?.length !== 1 ? "s" : ""}
+                </p>
+                <p className="text-sm text-blue-700">Students are waiting for your response.</p>
+              </div>
+            </div>
+            <Link href="/bookings">
+              <Button size="sm" variant="outline" className="shrink-0 border-blue-200 text-blue-700 hover:bg-blue-100">
+                Review <ChevronRight className="h-3.5 w-3.5 ml-1" />
+              </Button>
+            </Link>
           </motion.div>
         )}
 
         {/* Stats */}
         {isLoading ? (
           <div className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
-            {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-20 rounded-xl" />)}
+            {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24 rounded-xl" />)}
           </div>
-        ) : dashboard && (
-          <div className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
-            {[
-              { label: "Total Bookings", value: dashboard.stats.totalBookings, icon: BookOpen, color: "text-primary" },
-              { label: "Completed", value: dashboard.stats.completedSessions, icon: CheckCircle, color: "text-green-600" },
-              { label: "Pending", value: dashboard.stats.pendingBookings, icon: Clock, color: "text-amber-600" },
-              ...(isTutor ? [{ label: "Earnings", value: `$${dashboard.stats.totalEarnings.toFixed(0)}`, icon: Star, color: "text-secondary" }] : []),
-            ].slice(0, 4).map((stat) => (
-              <Card key={stat.label} className="border-card-border">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm text-muted-foreground">{stat.label}</p>
-                    <stat.icon className={`h-4 w-4 ${stat.color}`} />
-                  </div>
-                  <p className={`mt-1 text-2xl font-bold ${stat.color}`}>{stat.value}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
+        ) : dashboard ? (() => {
+          const stats: Array<{ label: string; value: string | number; icon: React.ElementType; color: string }> = isTutor ? [
+            { label: "Total Bookings", value: dashboard.stats.totalBookings, icon: BookOpen, color: "text-primary" },
+            { label: "Sessions Taught", value: dashboard.stats.completedSessions, icon: CheckCircle, color: "text-green-600" },
+            { label: "Pending Requests", value: dashboard.pendingRequests?.length ?? 0, icon: Clock, color: "text-amber-600" },
+            { label: "Est. Earnings", value: `$${dashboard.stats.totalEarnings.toFixed(0)}`, icon: DollarSign, color: "text-secondary" },
+          ] : [
+            { label: "Total Bookings", value: dashboard.stats.totalBookings, icon: BookOpen, color: "text-primary" },
+            { label: "Completed", value: dashboard.stats.completedSessions, icon: CheckCircle, color: "text-green-600" },
+            { label: "Pending", value: dashboard.stats.pendingBookings, icon: Clock, color: "text-amber-600" },
+            { label: "Tutors Available", value: dashboard.suggestedTutors?.length ?? 0, icon: Star, color: "text-secondary" },
+          ];
+          return (
+            <div className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+              {stats.map((stat) => (
+                <Card key={stat.label} className="border-card-border">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between mb-1">
+                      <p className="text-xs text-muted-foreground">{stat.label}</p>
+                      <stat.icon className={`h-4 w-4 ${stat.color}`} />
+                    </div>
+                    <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          );
+        })() : null}
 
         {/* Quick actions */}
         <div className="mb-8 grid gap-4 sm:grid-cols-2">
@@ -109,7 +148,26 @@ export default function DashboardPage() {
             </Card>
           </Link>
 
-          {!isTutor && !hasPendingApplication && (
+          {isTutor ? (
+            <Link href="/bookings?tab=tutor">
+              <Card className="group cursor-pointer border-card-border hover:shadow-md transition-all hover:-translate-y-0.5 bg-gradient-to-br from-secondary/5 to-transparent">
+                <CardContent className="flex items-center gap-4 p-5">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-secondary/10 group-hover:bg-secondary/15 transition-colors">
+                    <BookOpen className="h-5 w-5 text-secondary" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-foreground">Session requests</p>
+                    <p className="text-sm text-muted-foreground">
+                      {hasPendingRequests
+                        ? `${dashboard?.pendingRequests?.length} pending approval`
+                        : "No pending requests"}
+                    </p>
+                  </div>
+                  <ChevronRight className="ml-auto h-4 w-4 text-muted-foreground group-hover:text-secondary transition-colors" />
+                </CardContent>
+              </Card>
+            </Link>
+          ) : !isPending ? (
             <Link href="/become-tutor">
               <Card className="group cursor-pointer border-card-border hover:shadow-md transition-all hover:-translate-y-0.5 bg-gradient-to-br from-secondary/5 to-transparent">
                 <CardContent className="flex items-center gap-4 p-5">
@@ -124,25 +182,18 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
             </Link>
-          )}
-
-          {isTutor && (
-            <Link href="/bookings">
-              <Card className="group cursor-pointer border-card-border hover:shadow-md transition-all hover:-translate-y-0.5 bg-gradient-to-br from-secondary/5 to-transparent">
-                <CardContent className="flex items-center gap-4 p-5">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-secondary/10 group-hover:bg-secondary/15 transition-colors">
-                    <BookOpen className="h-5 w-5 text-secondary" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-foreground">Session requests</p>
-                    <p className="text-sm text-muted-foreground">
-                      {dashboard?.pendingRequests?.length ?? 0} pending
-                    </p>
-                  </div>
-                  <ChevronRight className="ml-auto h-4 w-4 text-muted-foreground group-hover:text-secondary transition-colors" />
-                </CardContent>
-              </Card>
-            </Link>
+          ) : (
+            <Card className="border-card-border bg-amber-50/50 border-amber-200/50">
+              <CardContent className="flex items-center gap-4 p-5">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-100">
+                  <Clock className="h-5 w-5 text-amber-600" />
+                </div>
+                <div>
+                  <p className="font-medium text-foreground">Application pending</p>
+                  <p className="text-sm text-muted-foreground">Under review by our team</p>
+                </div>
+              </CardContent>
+            </Card>
           )}
         </div>
 
@@ -170,7 +221,6 @@ export default function DashboardPage() {
                     <div
                       key={booking.id}
                       className="flex items-center gap-3 rounded-lg border border-border p-3"
-                      data-testid={`booking-item-${booking.id}`}
                     >
                       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-bold">
                         {booking.tutor?.name?.charAt(0) || "?"}
@@ -218,7 +268,7 @@ export default function DashboardPage() {
                 <div className="space-y-3">
                   {dashboard.suggestedTutors.slice(0, 4).map((tutor: any) => (
                     <Link key={tutor.id} href={`/tutors/${tutor.id}`}>
-                      <div className="flex items-center gap-3 rounded-lg border border-border p-3 hover:bg-muted/50 transition-colors cursor-pointer" data-testid={`suggested-tutor-${tutor.id}`}>
+                      <div className="flex items-center gap-3 rounded-lg border border-border p-3 hover:bg-muted/50 transition-colors cursor-pointer">
                         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-primary-foreground text-xs font-bold">
                           {tutor.name.charAt(0)}
                         </div>
