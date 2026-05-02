@@ -21,12 +21,13 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 
 /* ─── Brand tokens ───────────────────────────────────────────────────────── */
 const BRAND = {
-  deep:    "#33006F",   // primary dark purple
-  lavender:"#CDACDB",  // soft lavender accent
-  pink:    "#FF7EB3",  // button / highlight pink
-  purple:  "#8B7BFF",  // button / highlight purple
-  darkBg:  "#0a0118",  // hero / footer bg
-  lightBg: "#F7F0FB",  // tinted section bg
+  deep:       "#33006F",                                                    // primary dark purple
+  lavender:   "#CDACDB",                                                    // soft lavender accent
+  pink:       "#FF7EB3",                                                    // button pink end
+  purple:     "#8B7BFF",                                                    // button purple end
+  btnGrad:    "linear-gradient(135deg, #FF7EB3 0%, #8B7BFF 100%)",          // primary button fill
+  darkBg:     "#0a0118",                                                    // hero / footer bg
+  lightBg:    "#F7F0FB",                                                    // tinted section bg
 };
 
 function scrollToSection(id: string) {
@@ -224,8 +225,8 @@ export default function LandingPage() {
             </Button>
           </Link>
           <Link href="/register">
-            <Button size="sm" className="border-0 text-white font-semibold"
-              style={{ background: BRAND.pink, color: BRAND.deep }}>
+            <Button size="sm" className="border-0 font-semibold"
+              style={{ background: BRAND.deep, color: "#fff", boxShadow: "0 2px 12px rgba(51,0,111,0.4)" }}>
               Get started
             </Button>
           </Link>
@@ -338,7 +339,7 @@ export default function LandingPage() {
           >
             <Link href="/register">
               <Button size="lg" className="gap-2 px-9 py-6 text-base font-bold border-0"
-                style={{ background: BRAND.pink, color: BRAND.deep, boxShadow: "0 4px 24px rgba(255,126,179,0.35)" }}
+                style={{ background: BRAND.deep, color: "#fff", boxShadow: "0 6px 28px rgba(51,0,111,0.45)" }}
                 data-testid="button-cta-get-started">
                 Find a tutor <ChevronRight className="h-4 w-4" />
               </Button>
@@ -695,7 +696,7 @@ export default function LandingPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link href="/register">
                 <Button size="lg" className="gap-2 px-10 py-6 text-base font-bold border-0"
-                  style={{ background: BRAND.pink, color: BRAND.deep, boxShadow: "0 6px 24px rgba(255,126,179,0.4)" }}
+                  style={{ background: BRAND.deep, color: "#fff", boxShadow: "0 6px 28px rgba(51,0,111,0.4)" }}
                   data-testid="button-final-cta">
                   Create free account
                 </Button>
