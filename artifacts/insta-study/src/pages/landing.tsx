@@ -300,31 +300,23 @@ export default function LandingPage() {
               transition={{ duration: 0.5, delay: 0.36 }}
             >
               <Link href="/register">
-                <button
-                  className="btn-hero inline-flex items-center gap-2.5 rounded-xl px-7 py-4 text-[15px] font-bold text-white border-0"
-                  style={{ letterSpacing: "0.01em" }}
+                <Button
+                  size="lg"
+                  className="gap-2 px-7 h-12 text-[15px]"
                   data-testid="button-cta-get-started"
                 >
-                  Find a tutor
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20">
-                    <ChevronRight className="h-3.5 w-3.5" />
-                  </span>
-                </button>
+                  Find a tutor <ChevronRight className="h-4 w-4" />
+                </Button>
               </Link>
               <Link href="/register">
-                <button
-                  className="inline-flex items-center gap-2 rounded-xl px-6 py-4 text-[15px] font-semibold transition-all duration-150 hover:-translate-y-px"
-                  style={{
-                    color: "rgba(255,255,255,0.65)",
-                    border: "1px solid rgba(255,255,255,0.12)",
-                    background: "rgba(255,255,255,0.05)",
-                    letterSpacing: "0.01em",
-                  }}
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="gap-2 px-7 h-12 text-[15px] border-white/20 text-white bg-white/5 hover:bg-white/10 hover:text-white"
                   data-testid="button-cta-become-tutor"
                 >
-                  Become a tutor
-                  <ChevronRight className="h-3.5 w-3.5 opacity-60" />
-                </button>
+                  Become a tutor <ChevronRight className="h-4 w-4" />
+                </Button>
               </Link>
             </motion.div>
           </div>
