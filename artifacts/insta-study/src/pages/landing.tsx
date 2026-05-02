@@ -16,6 +16,20 @@ import {
   ArrowDown,
   CheckCircle2,
   Sparkles,
+  Calculator,
+  FlaskConical,
+  Dna,
+  Code2,
+  Globe,
+  Palette,
+  Music,
+  TrendingUp,
+  Brain,
+  BarChart3,
+  PenLine,
+  Atom,
+  Telescope,
+  Languages,
 } from "lucide-react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 
@@ -138,24 +152,40 @@ const CalculatorDoodle = ({ className = "" }: { className?: string }) => (
 
 /* ─── Subjects Marquee ───────────────────────────────────────────────────── */
 const SUBJECTS = [
-  "📐 Mathematics", "⚗️ Chemistry", "🧬 Biology", "💻 Computer Science",
-  "🌍 History", "📖 Literature", "⚡ Physics", "🎨 Art",
-  "🎵 Music Theory", "💰 Economics", "🧠 Psychology", "🌐 Languages",
-  "📊 Statistics", "🧮 Calculus", "🔭 Astronomy", "✍️ Essay Writing",
+  { icon: Calculator,   label: "Mathematics" },
+  { icon: FlaskConical, label: "Chemistry" },
+  { icon: Dna,          label: "Biology" },
+  { icon: Code2,        label: "Computer Science" },
+  { icon: Globe,        label: "History" },
+  { icon: BookOpen,     label: "Literature" },
+  { icon: Atom,         label: "Physics" },
+  { icon: Palette,      label: "Art" },
+  { icon: Music,        label: "Music Theory" },
+  { icon: TrendingUp,   label: "Economics" },
+  { icon: Brain,        label: "Psychology" },
+  { icon: Languages,    label: "Languages" },
+  { icon: BarChart3,    label: "Statistics" },
+  { icon: Telescope,    label: "Astronomy" },
+  { icon: PenLine,      label: "Essay Writing" },
+  { icon: Zap,          label: "Electrical Eng." },
 ];
 
 function Marquee() {
   const repeated = [...SUBJECTS, ...SUBJECTS];
   return (
-    <div className="overflow-hidden py-4" style={{ background: BRAND.deep }}>
+    <div className="overflow-hidden py-3 border-y" style={{ background: BRAND.deep, borderColor: "rgba(205,172,219,0.12)" }}>
       <div className="flex animate-marquee whitespace-nowrap" style={{ width: "max-content" }}>
-        {repeated.map((s, i) => (
-          <span key={i} className="inline-flex items-center gap-2 mx-6 text-sm font-semibold tracking-wide"
-            style={{ color: BRAND.lavender }}>
-            {s}
-            <span style={{ color: "rgba(205,172,219,0.3)", fontSize: 10 }}>◆</span>
-          </span>
-        ))}
+        {repeated.map((s, i) => {
+          const Icon = s.icon;
+          return (
+            <span key={i} className="inline-flex items-center gap-2 mx-7 text-[13px] font-medium tracking-wide"
+              style={{ color: "rgba(205,172,219,0.75)" }}>
+              <Icon className="h-3.5 w-3.5" style={{ color: BRAND.lavender }} />
+              {s.label}
+              <span className="ml-3 h-1 w-1 rounded-full inline-block" style={{ background: "rgba(205,172,219,0.25)" }} />
+            </span>
+          );
+        })}
       </div>
     </div>
   );
