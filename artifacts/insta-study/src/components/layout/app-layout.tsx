@@ -13,6 +13,7 @@ import {
   LogOut,
   Menu,
   X,
+  Shield,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -25,14 +26,16 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
   const isTutor = user?.isTutor && user?.tutorStatus === "approved";
   const isPending = user?.tutorStatus === "pending";
+  const isAdmin = user?.isAdmin;
 
   const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/tutors", label: "Find Tutors", icon: Search },
     { href: "/bookings", label: "My Bookings", icon: BookOpen },
-    ...(!isTutor && !isPending ? [{ href: "/become-tutor", label: "Become a Tutor", icon: GraduationCap }] : []),
+    ...(!isTutor && !isPending && !isAdmin ? [{ href: "/become-tutor", label: "Become a Tutor", icon: GraduationCap }] : []),
     ...(isTutor ? [{ href: "/availability", label: "Availability", icon: Calendar }] : []),
     { href: "/profile", label: "Profile", icon: User },
+    ...(isAdmin ? [{ href: "/admin", label: "Admin Panel", icon: Shield }] : []),
   ];
 
   const logoutMutation = useLogout({

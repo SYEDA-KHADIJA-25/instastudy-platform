@@ -17,6 +17,7 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
+  AdminStats,
   AuthResponse,
   AvailabilitySlot,
   Booking,
@@ -25,11 +26,13 @@ import type {
   DashboardData,
   ErrorResponse,
   HealthStatus,
+  ListAdminApplicationsParams,
   ListMyBookingsParams,
   ListTutorsParams,
   LoginBody,
   RegisterBody,
   SuccessResponse,
+  TutorApplication,
   TutorApplicationBody,
   TutorProfile,
   UpdateBookingBody,
@@ -1800,3 +1803,346 @@ export function useGetFeaturedTutors<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * @summary Get platform-wide stats (admin only)
+ */
+export const getGetAdminStatsUrl = () => {
+  return `/api/admin/stats`;
+};
+
+export const getAdminStats = async (
+  options?: RequestInit,
+): Promise<AdminStats> => {
+  return customFetch<AdminStats>(getGetAdminStatsUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetAdminStatsQueryKey = () => {
+  return [`/api/admin/stats`] as const;
+};
+
+export const getGetAdminStatsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAdminStats>>,
+  TError = ErrorType<ErrorResponse>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getAdminStats>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetAdminStatsQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminStats>>> = ({
+    signal,
+  }) => getAdminStats({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAdminStats>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetAdminStatsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAdminStats>>
+>;
+export type GetAdminStatsQueryError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Get platform-wide stats (admin only)
+ */
+
+export function useGetAdminStats<
+  TData = Awaited<ReturnType<typeof getAdminStats>>,
+  TError = ErrorType<ErrorResponse>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getAdminStats>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAdminStatsQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary List tutor applications (admin only)
+ */
+export const getListAdminApplicationsUrl = (
+  params?: ListAdminApplicationsParams,
+) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/admin/applications?${stringifiedParams}`
+    : `/api/admin/applications`;
+};
+
+export const listAdminApplications = async (
+  params?: ListAdminApplicationsParams,
+  options?: RequestInit,
+): Promise<TutorApplication[]> => {
+  return customFetch<TutorApplication[]>(getListAdminApplicationsUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListAdminApplicationsQueryKey = (
+  params?: ListAdminApplicationsParams,
+) => {
+  return [`/api/admin/applications`, ...(params ? [params] : [])] as const;
+};
+
+export const getListAdminApplicationsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listAdminApplications>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  params?: ListAdminApplicationsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listAdminApplications>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getListAdminApplicationsQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listAdminApplications>>
+  > = ({ signal }) =>
+    listAdminApplications(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listAdminApplications>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListAdminApplicationsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listAdminApplications>>
+>;
+export type ListAdminApplicationsQueryError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary List tutor applications (admin only)
+ */
+
+export function useListAdminApplications<
+  TData = Awaited<ReturnType<typeof listAdminApplications>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  params?: ListAdminApplicationsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listAdminApplications>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListAdminApplicationsQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Approve a tutor application (admin only)
+ */
+export const getApproveApplicationUrl = (tutorId: number) => {
+  return `/api/admin/applications/${tutorId}/approve`;
+};
+
+export const approveApplication = async (
+  tutorId: number,
+  options?: RequestInit,
+): Promise<SuccessResponse> => {
+  return customFetch<SuccessResponse>(getApproveApplicationUrl(tutorId), {
+    ...options,
+    method: "PATCH",
+  });
+};
+
+export const getApproveApplicationMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof approveApplication>>,
+    TError,
+    { tutorId: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof approveApplication>>,
+  TError,
+  { tutorId: number },
+  TContext
+> => {
+  const mutationKey = ["approveApplication"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof approveApplication>>,
+    { tutorId: number }
+  > = (props) => {
+    const { tutorId } = props ?? {};
+
+    return approveApplication(tutorId, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ApproveApplicationMutationResult = NonNullable<
+  Awaited<ReturnType<typeof approveApplication>>
+>;
+
+export type ApproveApplicationMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Approve a tutor application (admin only)
+ */
+export const useApproveApplication = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof approveApplication>>,
+    TError,
+    { tutorId: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof approveApplication>>,
+  TError,
+  { tutorId: number },
+  TContext
+> => {
+  return useMutation(getApproveApplicationMutationOptions(options));
+};
+
+/**
+ * @summary Reject a tutor application (admin only)
+ */
+export const getRejectApplicationUrl = (tutorId: number) => {
+  return `/api/admin/applications/${tutorId}/reject`;
+};
+
+export const rejectApplication = async (
+  tutorId: number,
+  options?: RequestInit,
+): Promise<SuccessResponse> => {
+  return customFetch<SuccessResponse>(getRejectApplicationUrl(tutorId), {
+    ...options,
+    method: "PATCH",
+  });
+};
+
+export const getRejectApplicationMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof rejectApplication>>,
+    TError,
+    { tutorId: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof rejectApplication>>,
+  TError,
+  { tutorId: number },
+  TContext
+> => {
+  const mutationKey = ["rejectApplication"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof rejectApplication>>,
+    { tutorId: number }
+  > = (props) => {
+    const { tutorId } = props ?? {};
+
+    return rejectApplication(tutorId, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type RejectApplicationMutationResult = NonNullable<
+  Awaited<ReturnType<typeof rejectApplication>>
+>;
+
+export type RejectApplicationMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Reject a tutor application (admin only)
+ */
+export const useRejectApplication = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof rejectApplication>>,
+    TError,
+    { tutorId: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof rejectApplication>>,
+  TError,
+  { tutorId: number },
+  TContext
+> => {
+  return useMutation(getRejectApplicationMutationOptions(options));
+};

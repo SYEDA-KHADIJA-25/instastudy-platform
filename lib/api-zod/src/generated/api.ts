@@ -42,6 +42,7 @@ export const LoginResponse = zod.object({
     bio: zod.string().nullish(),
     avatarUrl: zod.string().nullish(),
     isTutor: zod.boolean(),
+    isAdmin: zod.boolean(),
     tutorStatus: zod
       .enum(["none", "pending", "approved", "rejected"])
       .nullish(),
@@ -66,6 +67,7 @@ export const GetMeResponse = zod.object({
   bio: zod.string().nullish(),
   avatarUrl: zod.string().nullish(),
   isTutor: zod.boolean(),
+  isAdmin: zod.boolean(),
   tutorStatus: zod.enum(["none", "pending", "approved", "rejected"]).nullish(),
   createdAt: zod.coerce.date(),
 });
@@ -84,6 +86,7 @@ export const GetUserResponse = zod.object({
   bio: zod.string().nullish(),
   avatarUrl: zod.string().nullish(),
   isTutor: zod.boolean(),
+  isAdmin: zod.boolean(),
   tutorStatus: zod.enum(["none", "pending", "approved", "rejected"]).nullish(),
   createdAt: zod.coerce.date(),
 });
@@ -108,6 +111,7 @@ export const UpdateUserResponse = zod.object({
   bio: zod.string().nullish(),
   avatarUrl: zod.string().nullish(),
   isTutor: zod.boolean(),
+  isAdmin: zod.boolean(),
   tutorStatus: zod.enum(["none", "pending", "approved", "rejected"]).nullish(),
   createdAt: zod.coerce.date(),
 });
@@ -288,6 +292,7 @@ export const ListMyBookingsResponseItem = zod.object({
       bio: zod.string().nullish(),
       avatarUrl: zod.string().nullish(),
       isTutor: zod.boolean(),
+      isAdmin: zod.boolean(),
       tutorStatus: zod
         .enum(["none", "pending", "approved", "rejected"])
         .nullish(),
@@ -363,6 +368,7 @@ export const GetBookingResponse = zod.object({
       bio: zod.string().nullish(),
       avatarUrl: zod.string().nullish(),
       isTutor: zod.boolean(),
+      isAdmin: zod.boolean(),
       tutorStatus: zod
         .enum(["none", "pending", "approved", "rejected"])
         .nullish(),
@@ -431,6 +437,7 @@ export const UpdateBookingResponse = zod.object({
       bio: zod.string().nullish(),
       avatarUrl: zod.string().nullish(),
       isTutor: zod.boolean(),
+      isAdmin: zod.boolean(),
       tutorStatus: zod
         .enum(["none", "pending", "approved", "rejected"])
         .nullish(),
@@ -493,6 +500,7 @@ export const GetDashboardResponse = zod.object({
           bio: zod.string().nullish(),
           avatarUrl: zod.string().nullish(),
           isTutor: zod.boolean(),
+          isAdmin: zod.boolean(),
           tutorStatus: zod
             .enum(["none", "pending", "approved", "rejected"])
             .nullish(),
@@ -551,6 +559,7 @@ export const GetDashboardResponse = zod.object({
           bio: zod.string().nullish(),
           avatarUrl: zod.string().nullish(),
           isTutor: zod.boolean(),
+          isAdmin: zod.boolean(),
           tutorStatus: zod
             .enum(["none", "pending", "approved", "rejected"])
             .nullish(),
@@ -646,3 +655,61 @@ export const GetFeaturedTutorsResponseItem = zod.object({
 export const GetFeaturedTutorsResponse = zod.array(
   GetFeaturedTutorsResponseItem,
 );
+
+/**
+ * @summary Get platform-wide stats (admin only)
+ */
+export const GetAdminStatsResponse = zod.object({
+  totalUsers: zod.number(),
+  activeTutors: zod.number(),
+  pendingApplications: zod.number(),
+  rejectedApplications: zod.number(),
+});
+
+/**
+ * @summary List tutor applications (admin only)
+ */
+export const ListAdminApplicationsQueryParams = zod.object({
+  status: zod.enum(["pending", "approved", "rejected"]).optional(),
+});
+
+export const ListAdminApplicationsResponseItem = zod.object({
+  id: zod.number(),
+  userId: zod.number(),
+  name: zod.string(),
+  email: zod.string(),
+  avatarUrl: zod.string().nullish(),
+  bio: zod.string().nullish(),
+  subjects: zod.array(zod.string()),
+  experience: zod.string().nullish(),
+  hourlyRate: zod.number(),
+  rating: zod.number().nullish(),
+  reviewCount: zod.number(),
+  status: zod.enum(["pending", "approved", "rejected"]),
+  createdAt: zod.coerce.date(),
+});
+export const ListAdminApplicationsResponse = zod.array(
+  ListAdminApplicationsResponseItem,
+);
+
+/**
+ * @summary Approve a tutor application (admin only)
+ */
+export const ApproveApplicationParams = zod.object({
+  tutorId: zod.coerce.number(),
+});
+
+export const ApproveApplicationResponse = zod.object({
+  success: zod.boolean(),
+});
+
+/**
+ * @summary Reject a tutor application (admin only)
+ */
+export const RejectApplicationParams = zod.object({
+  tutorId: zod.coerce.number(),
+});
+
+export const RejectApplicationResponse = zod.object({
+  success: zod.boolean(),
+});

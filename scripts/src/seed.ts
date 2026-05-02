@@ -123,6 +123,20 @@ async function seed() {
     })
     .onConflictDoNothing();
 
+  // Create admin user
+  const adminHash = await bcrypt.hash("admin123", 12);
+  await db
+    .insert(usersTable)
+    .values({
+      name: "Admin",
+      email: "admin@instastudy.dev",
+      passwordHash: adminHash,
+      isAdmin: true,
+      isTutor: false,
+      tutorStatus: "none",
+    })
+    .onConflictDoNothing();
+
   console.log("Seed complete!");
   process.exit(0);
 }

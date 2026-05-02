@@ -47,6 +47,7 @@ export interface User {
   bio?: string | null;
   avatarUrl?: string | null;
   isTutor: boolean;
+  isAdmin: boolean;
   tutorStatus?: UserTutorStatus;
   createdAt: string;
 }
@@ -173,6 +174,38 @@ export interface DashboardData {
   stats: DashboardStats;
 }
 
+export interface AdminStats {
+  totalUsers: number;
+  activeTutors: number;
+  pendingApplications: number;
+  rejectedApplications: number;
+}
+
+export type TutorApplicationStatus =
+  (typeof TutorApplicationStatus)[keyof typeof TutorApplicationStatus];
+
+export const TutorApplicationStatus = {
+  pending: "pending",
+  approved: "approved",
+  rejected: "rejected",
+} as const;
+
+export interface TutorApplication {
+  id: number;
+  userId: number;
+  name: string;
+  email: string;
+  avatarUrl?: string | null;
+  bio?: string | null;
+  subjects: string[];
+  experience?: string | null;
+  hourlyRate: number;
+  rating?: number | null;
+  reviewCount: number;
+  status: TutorApplicationStatus;
+  createdAt: string;
+}
+
 export type ListTutorsParams = {
   search?: string;
   subject?: string;
@@ -201,5 +234,18 @@ export const ListMyBookingsStatus = {
   confirmed: "confirmed",
   completed: "completed",
   cancelled: "cancelled",
+  rejected: "rejected",
+} as const;
+
+export type ListAdminApplicationsParams = {
+  status?: ListAdminApplicationsStatus;
+};
+
+export type ListAdminApplicationsStatus =
+  (typeof ListAdminApplicationsStatus)[keyof typeof ListAdminApplicationsStatus];
+
+export const ListAdminApplicationsStatus = {
+  pending: "pending",
+  approved: "approved",
   rejected: "rejected",
 } as const;

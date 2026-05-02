@@ -15,6 +15,7 @@ import BookingsPage from "@/pages/bookings";
 import BecomeTutorPage from "@/pages/become-tutor";
 import AvailabilityPage from "@/pages/availability";
 import ProfilePage from "@/pages/profile";
+import AdminPage from "@/pages/admin";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient({
@@ -51,6 +52,9 @@ function Router() {
       </Route>
       <Route path="/profile">
         <ProtectedRoute><ProfilePage /></ProtectedRoute>
+      </Route>
+      <Route path="/admin">
+        <ProtectedRoute><AdminPage /></ProtectedRoute>
       </Route>
       <Route component={NotFound} />
     </Switch>

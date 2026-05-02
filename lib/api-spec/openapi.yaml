@@ -22,6 +22,8 @@ tags:
     description: Booking operations
   - name: dashboard
     description: Dashboard operations
+  - name: admin
+    description: Admin operations
 
 paths:
   /healthz:
@@ -513,6 +515,114 @@ paths:
                 items:
                   $ref: "#/components/schemas/TutorProfile"
 
+  /admin/stats:
+    get:
+      operationId: getAdminStats
+      tags: [admin]
+      summary: Get platform-wide stats (admin only)
+      responses:
+        "200":
+          description: Admin stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminStats"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /admin/applications:
+    get:
+      operationId: listAdminApplications
+      tags: [admin]
+      summary: List tutor applications (admin only)
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, approved, rejected]
+      responses:
+        "200":
+          description: List of tutor applications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TutorApplication"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /admin/applications/{tutorId}/approve:
+    patch:
+      operationId: approveApplication
+      tags: [admin]
+      summary: Approve a tutor application (admin only)
+      parameters:
+        - name: tutorId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Application approved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /admin/applications/{tutorId}/reject:
+    patch:
+      operationId: rejectApplication
+      tags: [admin]
+      summary: Reject a tutor application (admin only)
+      parameters:
+        - name: tutorId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Application rejected
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -592,6 +702,8 @@ components:
           nullable: true
         isTutor:
           type: boolean
+        isAdmin:
+          type: boolean
         tutorStatus:
           type: string
           enum: [none, pending, approved, rejected]
@@ -604,6 +716,7 @@ components:
         - name
         - email
         - isTutor
+        - isAdmin
         - createdAt
 
     UpdateUserBody:
@@ -835,3 +948,68 @@ components:
         - completedSessions
         - pendingBookings
         - totalEarnings
+
+    AdminStats:
+      type: object
+      properties:
+        totalUsers:
+          type: integer
+        activeTutors:
+          type: integer
+        pendingApplications:
+          type: integer
+        rejectedApplications:
+          type: integer
+      required:
+        - totalUsers
+        - activeTutors
+        - pendingApplications
+        - rejectedApplications
+
+    TutorApplication:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        avatarUrl:
+          type: string
+          nullable: true
+        bio:
+          type: string
+          nullable: true
+        subjects:
+          type: array
+          items:
+            type: string
+        experience:
+          type: string
+          nullable: true
+        hourlyRate:
+          type: number
+        rating:
+          type: number
+          nullable: true
+        reviewCount:
+          type: integer
+        status:
+          type: string
+          enum: [pending, approved, rejected]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - name
+        - email
+        - subjects
+        - hourlyRate
+        - reviewCount
+        - status
+        - createdAt
