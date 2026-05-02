@@ -263,29 +263,29 @@ export default function LandingPage() {
 
             {/* Headline */}
             <motion.h1
-              className="font-extrabold tracking-tight text-white leading-[1.02]"
-              style={{ fontSize: "clamp(40px, 5vw, 72px)" }}
+              className="font-black text-white leading-[1.0] tracking-[-0.03em]"
+              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "clamp(42px, 5.5vw, 76px)" }}
               initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.1 }}
             >
               The smarter way<br />
-              to master{" "}
-              <span className="relative inline-block">
-                <span style={{ color: BRAND.lavender }}>any subject.</span>
-                <motion.span
-                  className="absolute -bottom-1 left-0 right-0 h-[3px] rounded-full"
-                  style={{ background: `linear-gradient(to right, ${BRAND.lavender}, transparent)` }}
-                  initial={{ scaleX: 0, originX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ duration: 0.7, delay: 0.8 }}
-                />
+              <span className="relative">
+                to master{" "}
+                <span style={{
+                  background: `linear-gradient(120deg, #CDACDB 0%, #e8d5f0 50%, #CDACDB 100%)`,
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}>
+                  any subject.
+                </span>
               </span>
             </motion.h1>
 
             {/* Sub-headline */}
             <motion.p
-              className="mt-6 text-base leading-relaxed max-w-md"
-              style={{ color: "rgba(255,255,255,0.42)" }}
+              className="mt-7 text-[17px] leading-[1.75] max-w-[440px] font-normal"
+              style={{ color: "rgba(255,255,255,0.48)", letterSpacing: "0.01em" }}
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.25 }}
             >
@@ -295,25 +295,35 @@ export default function LandingPage() {
 
             {/* CTA row */}
             <motion.div
-              className="mt-9 flex items-center gap-5 flex-wrap"
+              className="mt-10 flex items-center gap-4 flex-wrap"
               initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.36 }}
             >
               <Link href="/register">
-                <Button size="lg"
-                  className="gap-2 px-8 py-5 text-sm font-bold border-0 h-auto bg-primary text-primary-foreground"
-                  data-testid="button-cta-get-started">
-                  Find a tutor <ChevronRight className="h-3.5 w-3.5" />
-                </Button>
+                <button
+                  className="btn-hero inline-flex items-center gap-2.5 rounded-xl px-7 py-4 text-[15px] font-bold text-white border-0"
+                  style={{ letterSpacing: "0.01em" }}
+                  data-testid="button-cta-get-started"
+                >
+                  Find a tutor
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20">
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </span>
+                </button>
               </Link>
               <Link href="/register">
                 <button
-                  className="flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-80"
-                  style={{ color: "rgba(255,255,255,0.5)" }}
+                  className="inline-flex items-center gap-2 rounded-xl px-6 py-4 text-[15px] font-semibold transition-all duration-150 hover:-translate-y-px"
+                  style={{
+                    color: "rgba(255,255,255,0.65)",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    background: "rgba(255,255,255,0.05)",
+                    letterSpacing: "0.01em",
+                  }}
                   data-testid="button-cta-become-tutor"
                 >
                   Become a tutor
-                  <ChevronRight className="h-3.5 w-3.5" />
+                  <ChevronRight className="h-3.5 w-3.5 opacity-60" />
                 </button>
               </Link>
             </motion.div>
