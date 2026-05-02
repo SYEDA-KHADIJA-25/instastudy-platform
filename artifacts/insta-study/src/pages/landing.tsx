@@ -265,16 +265,16 @@ export default function LandingPage() {
           backgroundPosition: "center top",
         }}
       >
-        {/* No full overlay — background image shows through fully */}
+        {/* Left-column dark fade — clean gradient that stops at ~55% so the right illustration shows fully */}
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: "linear-gradient(105deg, rgba(8,0,18,0.88) 0%, rgba(8,0,18,0.72) 30%, rgba(8,0,18,0.22) 52%, transparent 67%)" }} />
 
-        {/* ── Content ── */}
+        {/* ── Content — vertically centered, left column only ── */}
         <motion.div
-          className="relative z-10 mx-auto w-full max-w-6xl px-8 md:px-12 pt-32 pb-24"
-          style={{ y: heroY, opacity: heroOpacity }}
+          className="relative z-10 w-full max-w-6xl mx-auto px-8 md:px-14 flex items-center"
+          style={{ y: heroY, opacity: heroOpacity, minHeight: "100vh" }}
         >
-          {/* LEFT: Copy — localized frosted backdrop only behind text */}
-          <div className="flex flex-col items-start text-left max-w-xl rounded-2xl px-8 py-8"
-            style={{ background: "rgba(10,1,24,0.52)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
+          <div className="flex flex-col items-start text-left max-w-[520px]">
             {/* Eyebrow badge */}
             <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
               <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-[11px] font-bold tracking-widest uppercase mb-9"
@@ -287,25 +287,24 @@ export default function LandingPage() {
             {/* Headline */}
             <motion.h1
               className="font-black leading-[1.08] tracking-[-0.03em] text-white"
-              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "clamp(38px, 4.5vw, 66px)" }}
+              style={{
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
+                fontSize: "clamp(38px, 4.5vw, 66px)",
+                textShadow: "0 2px 24px rgba(8,0,18,0.7), 0 1px 4px rgba(8,0,18,0.9)",
+              }}
               initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.1 }}
             >
               The smarter way<br />to master{" "}
-              <span style={{
-                background: `linear-gradient(120deg, ${BRAND.lavender} 0%, #e8d5f0 100%)`,
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}>
+              <span style={{ color: BRAND.lavender }}>
                 any subject.
               </span>
             </motion.h1>
 
             {/* Sub-headline */}
             <motion.p
-              className="mt-6 text-[17px] leading-[1.7] max-w-[440px] font-normal"
-              style={{ color: "rgba(255,255,255,0.7)" }}
+              className="mt-6 text-[17px] leading-[1.7] max-w-[440px] font-semibold"
+              style={{ color: "rgba(255,255,255,0.92)", textShadow: "0 1px 12px rgba(8,0,18,0.85), 0 1px 3px rgba(8,0,18,1)" }}
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.25 }}
             >
