@@ -48,13 +48,22 @@ app.use((err, _req, res, _next) => {
 });
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, async () => {
-  console.log(`\n✅ InstaStudy API running on http://localhost:${PORT}`);
-  try {
-    const { db } = require("./db");
-    await db.collection("_health").doc("ping").set({ ok: true });
-    console.log("✅ Firestore connected successfully\n");
-  } catch (e) {
-    console.error("❌ Firestore connection failed:", e.message, "\n");
-  }
-});
+
+// Local development — listen on port
+// Vercel serverless — export the app
+if (process.env.VERCEL) {
+  module.exports = app;
+} else {
+  app.listen(PORT, async () => {
+    console.log(`\n✅ InstaStudy API running on http://localhost:${PORT}`);
+    try {
+      const { db } = require("./db");
+      await db.collection("_health").doc("ping").set({ ok: true });
+      console.log("✅ Firestore connected successfully\n");
+    } catch (e) {
+      console.error("❌ Firestore connection failed:", e.message, "\n");
+    }
+  });
+}
+
+module.exports = app;
