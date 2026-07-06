@@ -1,12 +1,17 @@
 const admin = require("firebase-admin");
 require("dotenv").config();
 
+// Only initialize if not already done (db.js may have done it first)
 if (!admin.apps.length) {
-  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || "{}");
-  admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+  try {
+    const raw = process.env.FIREBASE_SERVICE_ACCOUNT || "{}";
+    const serviceAccount = typeof raw === "string" ? JSON.parse(raw) : raw;
+    admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+  } catch (e) {
+    console.error("Firebase Admin auth init error:", e.message);
+  }
 }
 
-/** Express middleware — verifies Firebase ID token from Authorization header */
 async function requireAuth(req, res, next) {
   const header = req.headers.authorization || "";
   const token = header.startsWith("Bearer ") ? header.slice(7) : null;
