@@ -13,8 +13,17 @@ const paymentsRouter  = require("./routes/payments");
 
 const app = express();
 
-app.use(cors({ origin: "*", methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"], allowedHeaders: ["Content-Type","Authorization"] }));
-app.options("*", cors());
+const corsOptions = {
+  origin: "*",
+  methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type","Authorization"],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+};
+
+// Handle preflight for ALL routes FIRST
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 // ⚠️ Stripe webhook MUST use raw body — register BEFORE express.json()
 app.use("/api/payments/webhook", require("express").raw({ type: "application/json" }));
