@@ -47,6 +47,8 @@ app.use("/api/reviews",      reviewsRouter);
 app.use("/api/payments",     paymentsRouter);
 
 app.get("/health", (_req, res) => res.json({ status: "ok" }));
+app.get("/test", (_req, res) => res.json({ test: "working", path: "/test" }));
+app.get("/api/test", (_req, res) => res.json({ test: "api working" }));
 
 app.use((req, res) => {
   res.status(404).json({ error: `Route not found: ${req.method} ${req.path}` });
