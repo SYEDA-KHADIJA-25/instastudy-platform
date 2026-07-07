@@ -13,7 +13,8 @@ const paymentsRouter  = require("./routes/payments");
 
 const app = express();
 
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: "*", methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"], allowedHeaders: ["Content-Type","Authorization"] }));
+app.options("*", cors());
 
 // ⚠️ Stripe webhook MUST use raw body — register BEFORE express.json()
 app.use("/api/payments/webhook", require("express").raw({ type: "application/json" }));
