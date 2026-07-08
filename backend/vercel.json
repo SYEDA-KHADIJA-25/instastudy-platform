@@ -1,15 +1,5 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "serverless/index.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "serverless/index.js"
-    }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/serverless/index.js" }
   ]
 }
