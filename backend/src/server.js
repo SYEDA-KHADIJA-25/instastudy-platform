@@ -26,8 +26,8 @@ app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 
 // ⚠️ Stripe webhook MUST use raw body — register BEFORE express.json()
-app.use("/api/payments/webhook", require("express").raw({ type: "application/json" }));
-app.use("/api/payments/webhook", paymentsRouter);
+// Handled exclusively here; NOT re-mounted under /api/payments to avoid double-handling
+app.use("/api/payments/webhook", require("express").raw({ type: "application/json" }), paymentsRouter);
 
 app.use(express.json({ limit: "10mb" }));
 

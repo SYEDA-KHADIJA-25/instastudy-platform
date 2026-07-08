@@ -83,7 +83,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
 
       setUser(appUser);
-    } catch {
+    } catch (err) {
+      console.error("[AuthProvider] loadUser error:", err);
       setIsError(true);
       setUser(null);
     } finally {

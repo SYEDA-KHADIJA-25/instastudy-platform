@@ -23,18 +23,26 @@ const BASE = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
 
 async function getToken(): Promise<string> {
   const auth = getFirebaseAuth();
-  // Wait up to 5s for Firebase to populate currentUser after sign-in
-  if (!auth.currentUser) {
-    await new Promise<void>((resolve) => {
-      const unsub = auth.onAuthStateChanged((u) => {
-        if (u) { unsub(); resolve(); }
-      });
-      setTimeout(() => { unsub(); resolve(); }, 5000);
-    });
+
+  // If currentUser is already present, use it immediately
+  if (auth.currentUser) {
+    return auth.currentUser.getIdToken(false);
   }
-  const user = auth.currentUser;
+
+  // Wait for Firebase to finish its auth-state restore (happens on page load / after sign-in)
+  const user = await new Promise<import("firebase/auth").User | null>((resolve) => {
+    // onAuthStateChanged fires synchronously if auth is already initialised,
+    // or asynchronously once the SDK has restored the session from storage.
+    const unsub = auth.onAuthStateChanged((u) => {
+      unsub();
+      resolve(u);
+    });
+    // Safety net: don't hang forever
+    setTimeout(() => { unsub(); resolve(null); }, 8000);
+  });
+
   if (!user) throw new Error("Not authenticated");
-  return user.getIdToken(/* forceRefresh */ false);
+  return user.getIdToken(false);
 }
 
 async function api<T>(
