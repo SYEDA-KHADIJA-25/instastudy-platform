@@ -123,7 +123,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 />
               ) : (
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold shrink-0">
-                  {user.name.charAt(0).toUpperCase()}
+                  {user?.name?.charAt(0)?.toUpperCase() || "U"}
                 </div>
               )}
               <div className="min-w-0 flex-1">

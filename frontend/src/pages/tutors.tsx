@@ -131,7 +131,7 @@ export default function TutorsPage() {
                           />
                         ) : (
                           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-primary-foreground text-sm font-bold">
-                            {tutor.name.charAt(0)}
+                            {tutor?.name?.charAt(0) || "T"}
                           </div>
                         )}
                         <div className="min-w-0 flex-1">

@@ -127,7 +127,7 @@ export default function TutorProfilePage() {
                     />
                   ) : (
                     <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-secondary text-primary-foreground text-2xl font-bold shadow-lg border-4 border-background">
-                      {tutor.name?.charAt(0) ?? "?"}
+                      {tutor?.name?.charAt(0) || "T"}
                     </div>
                   )}
                   <div className="flex gap-2 pb-1">

@@ -103,7 +103,7 @@ export default function BookPage() {
                   />
                 ) : (
                   <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-primary-foreground text-lg font-bold">
-                    {tutor.name.charAt(0)}
+                    {tutor?.name?.charAt(0) || "T"}
                   </div>
                 )}
                 <div className="flex-1">

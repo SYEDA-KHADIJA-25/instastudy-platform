@@ -97,7 +97,7 @@ function Avatar({
   size?: "sm" | "lg";
   onUpload?: (dataUrl: string) => void;
 }) {
-  const letter = name?.charAt(0)?.toUpperCase() || "?";
+  const letter = name?.charAt(0)?.toUpperCase() || "U";;
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -298,7 +298,7 @@ export default function DashboardPage() {
                     <Link key={tutor.id} href={`/tutors/${tutor.id}`}>
                       <div className="flex items-center gap-3 rounded-lg border border-border p-3 hover:bg-muted/50 transition-colors cursor-pointer">
                         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-primary-foreground text-xs font-bold">
-                          {tutor.name.charAt(0)}
+                          {tutor?.name?.charAt(0) || "T"}
                         </div>
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-sm font-medium text-foreground">{tutor.name}</p>

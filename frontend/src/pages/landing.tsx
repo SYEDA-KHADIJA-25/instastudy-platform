@@ -523,7 +523,7 @@ export default function LandingPage() {
                       <div className="flex items-start gap-3 sm:gap-4">
                         <div className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl text-white font-bold shadow-sm"
                           style={{ background: BRAND.deep }}>
-                          {tutor.name.charAt(0)}
+                          {tutor?.name?.charAt(0) || "T"}
                         </div>
                         <div className="min-w-0 flex-1">
                           <h3 className="font-bold truncate text-sm sm:text-base" style={{ color: BRAND.deep }}>{tutor.name}</h3>

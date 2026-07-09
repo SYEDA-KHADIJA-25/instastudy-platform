@@ -50,7 +50,7 @@ function TutorRow({
       <div className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center">
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-white font-bold text-sm">
-            {tutor.name.charAt(0).toUpperCase()}
+            {tutor?.name?.charAt(0)?.toUpperCase() || "T"}
           </div>
           <div className="min-w-0 flex-1">
             <p className="font-semibold text-foreground truncate">{tutor.name}</p>
