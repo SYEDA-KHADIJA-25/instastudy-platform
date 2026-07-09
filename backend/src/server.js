@@ -1,33 +1,34 @@
 require("dotenv").config();
 const express = require("express");
-const cors    = require("cors");
+const cors = require("cors");
 
-const usersRouter     = require("./routes/users");
-const tutorsRouter    = require("./routes/tutors");
-const availRouter     = require("./routes/availability");
-const bookingsRouter  = require("./routes/bookings");
+// Importing routes
+const usersRouter = require("./routes/users");
+const tutorsRouter = require("./routes/tutors");
+const availRouter = require("./routes/availability");
+const bookingsRouter = require("./routes/bookings");
 const materialsRouter = require("./routes/materials");
-const adminRouter     = require("./routes/admin");
-const reviewsRouter   = require("./routes/reviews");
-const paymentsRouter  = require("./routes/payments");
+const adminRouter = require("./routes/admin");
+const reviewsRouter = require("./routes/reviews");
+const paymentsRouter = require("./routes/payments");
 
 const app = express();
 
+// CORS configuration - Keeping origin: "*" for now, but 
+// consider restricting to your Vercel frontend URL for better security
 const corsOptions = {
   origin: "*",
-  methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
-  allowedHeaders: ["Content-Type","Authorization"],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   preflightContinue: false,
   optionsSuccessStatus: 204
 };
 
-// Handle preflight for ALL routes FIRST
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 
-// ⚠️ Stripe webhook MUST use raw body — register BEFORE express.json()
-// Handled exclusively here; NOT re-mounted under /api/payments to avoid double-handling
-app.use("/api/payments/webhook", require("express").raw({ type: "application/json" }), paymentsRouter);
+// ⚠️ Stripe webhook must use raw body — must be BEFORE express.json()
+app.use("/api/payments/webhook", express.raw({ type: "application/json" }), paymentsRouter);
 
 app.use(express.json({ limit: "10mb" }));
 
@@ -37,23 +38,30 @@ app.use((req, _res, next) => {
   next();
 });
 
-app.use("/api/users",        usersRouter);
-app.use("/api/tutors",       tutorsRouter);
+// API Routes
+app.use("/api/users", usersRouter);
+app.use("/api/tutors", tutorsRouter);
 app.use("/api/availability", availRouter);
-app.use("/api/bookings",     bookingsRouter);
-app.use("/api/materials",    materialsRouter);
-app.use("/api/admin",        adminRouter);
-app.use("/api/reviews",      reviewsRouter);
-app.use("/api/payments",     paymentsRouter);
+app.use("/api/bookings", bookingsRouter);
+app.use("/api/materials", materialsRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/reviews", reviewsRouter);
+app.use("/api/payments", paymentsRouter);
 
+// Health check routes
 app.get("/health", (_req, res) => res.json({ status: "ok" }));
 app.get("/test", (_req, res) => res.json({ test: "working", path: "/test" }));
 app.get("/api/test", (_req, res) => res.json({ test: "api working" }));
 
+// Root route (Optional: prevents 404 on base URL)
+app.get("/", (_req, res) => res.json({ message: "Welcome to InstaStudy API" }));
+
+// Fallback for 404
 app.use((req, res) => {
   res.status(404).json({ error: `Route not found: ${req.method} ${req.path}` });
 });
 
+// Global error handler
 app.use((err, _req, res, _next) => {
   console.error("Unhandled error:", err.message);
   res.status(500).json({ error: err.message });
@@ -61,8 +69,7 @@ app.use((err, _req, res, _next) => {
 
 const PORT = process.env.PORT || 4000;
 
-// Local development — listen on port
-// Vercel serverless — export the app
+// Vercel serverless / Local development check
 if (process.env.VERCEL) {
   module.exports = app;
 } else {
