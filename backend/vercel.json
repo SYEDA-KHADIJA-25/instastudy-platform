@@ -1,10 +1,11 @@
 {
-  "functions": {
-    "serverless/index.js": {
-      "memory": 1024,
-      "maxDuration": 10
+  "version": 2,
+  "builds": [
+    {
+      "src": "serverless/index.js",
+      "use": "@vercel/node"
     }
-  },
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/serverless/index.js" }
   ]
